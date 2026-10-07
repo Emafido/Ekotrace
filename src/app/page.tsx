@@ -1,69 +1,393 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React, { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { CULTURAL_ASSETS } from '@/data/culturalAssets';
+import { EventCard } from '@/components/EventCard';
+import { CulturalCard } from '@/components/CulturalCard';
+import { CategoryLink } from '@/components/CategoryLink';
+import { VerificationBadge } from '@/components/VerificationBadge';
+import { ClaimDrawer } from '@/components/ClaimDrawer';
+import { Claim, CulturalAssetType } from '@/types';
+import { ArrowRight, ShieldCheck, FileCheck, Layers, Sparkles } from 'lucide-react';
+
+export default function HomePage() {
+  const [selectedClaim, setSelectedClaim] = useState<Claim | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  // Filter 4 events for "Happening in Lagos"
+  const happeningEvents = CULTURAL_ASSETS.filter((a) => a.happeningNow).slice(0, 4);
+
+  // Seeded records for Discover Lagos mixed grid
+  const discoverAssets = CULTURAL_ASSETS;
+
+  // Find Eyo festival for featured story and trust claim
+  const eyoAsset = CULTURAL_ASSETS.find((a) => a.id === 'eyo-festival') || CULTURAL_ASSETS[0];
+  const trustSampleClaim = eyoAsset.claims[0]; // "The festival takes place on Lagos Island"
+
+  const handleOpenClaim = (claim: Claim) => {
+    setSelectedClaim(claim);
+    setIsDrawerOpen(true);
+  };
+
+  const categories: { type: CulturalAssetType; label: string; desc: string }[] = [
+    { type: 'festival', label: 'Festivals', desc: 'Civic masquerades, carnivals, and sacred processions' },
+    { type: 'place', label: 'Places', desc: 'Galleries, architectural sanctuaries, and historic quarters' },
+    { type: 'tradition', label: 'Traditions', desc: 'Living rituals, ancestor veneration, and royal rites' },
+    { type: 'food', label: 'Food', desc: 'Nocturnal grilling, street delicacies, and heritage recipes' },
+    { type: 'craft', label: 'Crafts', desc: 'Adire indigo dyeing, wood carving, and beadwork guilds' },
+    { type: 'story', label: 'Stories', desc: 'Waterfront oral histories, migration sagas, and memory' },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="space-y-24 sm:space-y-32 pb-24">
+      {/* ===================================================================
+          HERO SECTION
+          Contemporary Lagos + Premium Cultural Editorial Publication
+      =================================================================== */}
+      <section className="relative pt-6 sm:pt-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Hero Copy (Editorial) */}
+          <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#F2ECE1] border border-[#DDD8CA] rounded-sm text-xs font-mono tracking-wider text-[#69655D] uppercase">
+              <span>Isale Eko • Popo Aguda • Lekki • Badagry</span>
+            </div>
+
+            <h1 className="font-editorial text-4xl sm:text-6xl lg:text-7xl font-medium tracking-tight text-[#161615] leading-[1.08]">
+              Explore Lagos through the people who live it.
+            </h1>
+
+            <p className="text-base sm:text-xl text-[#4A4944] leading-relaxed max-w-2xl font-light">
+              Discover festivals, traditions, places, food, crafts and stories — with information you can trace back to its source.
+            </p>
+
+            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <Link
+                href="/explore"
+                className="inline-flex items-center justify-center gap-2 bg-[#161615] hover:bg-[#B4441F] text-[#FAF9F5] font-medium text-sm sm:text-base px-6 py-3.5 rounded-sm transition-colors duration-200"
+              >
+                <span>Explore Lagos</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              <Link
+                href="/contribute"
+                className="inline-flex items-center justify-center gap-2 bg-transparent hover:bg-[#F2ECE1] text-[#161615] border border-[#D4CEBF] font-medium text-sm sm:text-base px-6 py-3.5 rounded-sm transition-colors duration-200"
+              >
+                <span>Contribute what you know</span>
+              </Link>
+            </div>
+
+            <div className="pt-4 flex items-center gap-6 text-xs text-[#73736C] font-mono border-t border-[#EAE5D9]">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#1E5C3E]" />
+                <span>Community Verified</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#8E361D]" />
+                <span>Transparent Conflicts</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#734F18]" />
+                <span>Zero Hallucinations</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Hero Photography (High-impact cultural portrait) */}
+          <div className="lg:col-span-5 relative">
+            <div className="relative aspect-[4/5] w-full rounded-sm overflow-hidden bg-[#E5E0D2] border border-[#DDD8CA] shadow-xl">
+              <Image
+                src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=1400&auto=format&fit=crop"
+                alt="Ceremonial gathering in historical Lagos Island"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#161615]/80 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
+                <span className="text-[11px] font-mono uppercase tracking-widest text-[#E8E3D8]">
+                  Field Archival Record
+                </span>
+                <p className="font-editorial text-lg sm:text-xl font-medium leading-snug">
+                  Adamu Orisha Custodians • Isale Eko
+                </p>
+                <p className="text-xs text-[#DDD8CA]">
+                  Photo recorded with oral history council consent
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          HAPPENING NOW (HAPPENING IN LAGOS)
+          3-4 Event records using large image-led cards
+      =================================================================== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#E8E3D8] pb-4">
+          <div>
+            <span className="text-xs font-mono uppercase tracking-widest text-[#B4441F] font-semibold">
+              Seasonal Calendar
+            </span>
+            <h2 className="font-editorial text-3xl sm:text-4xl font-medium text-[#161615] mt-1">
+              Happening in Lagos
+            </h2>
+          </div>
+          <Link
+            href="/explore?category=festival"
+            className="text-xs sm:text-sm font-medium text-[#161615] hover:text-[#B4441F] inline-flex items-center gap-1 group transition-colors"
+          >
+            <span>View all festival dates</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {happeningEvents.map((event, idx) => (
+            <EventCard key={event.id} asset={event} priority={idx === 0} />
+          ))}
+        </div>
+      </section>
+
+      {/* ===================================================================
+          EXPLORE CULTURE
+          Visually distinct editorial category links
+      =================================================================== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="border-b border-[#E8E3D8] pb-4">
+          <span className="text-xs font-mono uppercase tracking-widest text-[#73736C]">
+            Curated Discovery
+          </span>
+          <h2 className="font-editorial text-3xl sm:text-4xl font-medium text-[#161615] mt-1">
+            Explore culture
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {categories.map((cat) => {
+            const count = CULTURAL_ASSETS.filter((a) => a.type === cat.type).length;
+            return (
+              <CategoryLink
+                key={cat.type}
+                type={cat.type}
+                label={cat.label}
+                count={count}
+                description={cat.desc}
+              />
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ===================================================================
+          FEATURED STORY
+          Large editorial section with strong cultural photography
+      =================================================================== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#FAF7F0] border border-[#E5E0D2] rounded-sm p-6 sm:p-10 lg:p-14">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+            {/* Editorial Story Image */}
+            <div className="lg:col-span-6 relative">
+              <div className="relative aspect-[4/3] w-full rounded-sm overflow-hidden bg-[#E2DDD0]">
+                <Image
+                  src={eyoAsset.coverImage}
+                  alt="Ceremonial white robes of Eyo in Isale Eko"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="mt-3 flex items-center justify-between text-xs text-[#73736C] font-mono">
+                <span>Isale Eko Heritage Circle</span>
+                <span>Archival Monograph #102</span>
+              </div>
+            </div>
+
+            {/* Editorial Long-form Story Content */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="space-y-2">
+                <span className="text-xs font-mono uppercase tracking-widest text-[#B4441F] font-semibold">
+                  Featured Long-form Story
+                </span>
+                <h3 className="font-editorial text-3xl sm:text-5xl font-medium text-[#161615] leading-[1.12]">
+                  Behind the white robes of Eyo
+                </h3>
+              </div>
+
+              <blockquote className="border-l-2 border-[#B4441F] pl-4 italic text-[#4A4944] text-base sm:text-lg font-editorial">
+                “When the staff of Adamu Orisha strikes the earth of Isale Eko, it does not strike empty dust. It awakens three hundred years of Oba lineage.”
+              </blockquote>
+
+              <p className="text-sm sm:text-base text-[#4E4D47] leading-relaxed font-light">
+                The Adimu Orisha Play is not a street carnival for casual amusement. In Lagos Island memory, each procession represents an exacting spiritual architecture. When the Iga grant consent, the Island shuts its vehicular thoroughfares. Barefoot celebrants walk under strict vows: no caps, no head-ties, and no sandals may be worn within sight of an Eyo.
+              </p>
+
+              <div className="pt-2 flex items-center gap-4">
+                <Link
+                  href={`/explore/${eyoAsset.slug}`}
+                  className="inline-flex items-center gap-2 bg-[#161615] hover:bg-[#B4441F] text-white text-xs sm:text-sm font-medium px-5 py-3 rounded-sm transition-colors"
+                >
+                  <span>Read full cultural record</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+                <button
+                  onClick={() => handleOpenClaim(trustSampleClaim)}
+                  className="text-xs sm:text-sm font-medium text-[#5A5954] hover:text-[#161615] underline underline-offset-4"
+                >
+                  Inspect verified claims
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          DISCOVER LAGOS
+          Image-heavy mixed grid of cultural records
+      =================================================================== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#E8E3D8] pb-4">
+          <div>
+            <span className="text-xs font-mono uppercase tracking-widest text-[#73736C]">
+              Living Archive
+            </span>
+            <h2 className="font-editorial text-3xl sm:text-4xl font-medium text-[#161615] mt-1">
+              Discover Lagos
+            </h2>
+          </div>
+          <p className="text-xs text-[#73736C] max-w-sm">
+            Curated across visual arts, nocturnal foodways, lagoon stilt architecture, and sacred traditions.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Asymmetrical editorial grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {/* Item 1: Horizontal wide layout */}
+          <div className="md:col-span-2">
+            <CulturalCard asset={discoverAssets[1]} layout="horizontal" />
+          </div>
+
+          {/* Item 2: Standard card */}
+          <div>
+            <CulturalCard asset={discoverAssets[2]} />
+          </div>
+
+          {/* Item 3 */}
+          <div>
+            <CulturalCard asset={discoverAssets[3]} />
+          </div>
+
+          {/* Item 4 */}
+          <div>
+            <CulturalCard asset={discoverAssets[5]} />
+          </div>
+
+          {/* Item 5 */}
+          <div>
+            <CulturalCard asset={discoverAssets[6]} />
+          </div>
+
+          {/* Item 6: Horizontal wide layout */}
+          <div className="md:col-span-2 lg:col-span-3">
+            <CulturalCard asset={discoverAssets[7]} layout="horizontal" />
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* ===================================================================
+          TRUST SECTION
+          Know where the story came from (compact, clear)
+      =================================================================== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white border border-[#E8E3D8] p-8 sm:p-12 rounded-sm space-y-8">
+          <div className="max-w-2xl space-y-3">
+            <span className="text-xs font-mono uppercase tracking-widest text-[#1E5C3E] font-semibold">
+              The Trust Layer
+            </span>
+            <h2 className="font-editorial text-3xl sm:text-4xl font-medium text-[#161615]">
+              Know where the story came from.
+            </h2>
+            <p className="text-sm sm:text-base text-[#4E4D47] leading-relaxed font-light">
+              Important information on EkoTrace can show its source, verification status and unresolved uncertainty. When facts conflict, we document the perspectives rather than erase them.
+            </p>
+          </div>
+
+          {/* Interactive example claim card */}
+          <div className="p-6 bg-[#FAF9F5] border border-[#DDD8CA] rounded-sm max-w-3xl space-y-4">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#73736C]">
+                Example Cultural Claim
+              </span>
+              <VerificationBadge status="verified-community" size="md" />
+            </div>
+
+            <p className="font-editorial text-xl sm:text-2xl text-[#161615]">
+              “The festival takes place on Lagos Island.”
+            </p>
+
+            <div className="flex items-center justify-between gap-4 pt-3 border-t border-[#EAE5D9] flex-wrap text-xs text-[#5A5954]">
+              <div className="flex items-center gap-4">
+                <span className="font-mono text-[#1E5C3E] font-medium">✓ Community verified</span>
+                <span className="text-[#8C887B]">•</span>
+                <span className="font-mono text-[#5A5954]">3 supporting sources</span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleOpenClaim(trustSampleClaim)}
+                className="font-medium text-[#161615] hover:text-[#B4441F] underline underline-offset-4 transition-colors"
+              >
+                See how verification works →
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          CONTRIBUTION CTA
+          Know something Lagos should remember?
+      =================================================================== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#161615] text-[#FAF9F5] p-8 sm:p-14 rounded-sm">
+          <div className="max-w-3xl space-y-5">
+            <span className="text-xs font-mono uppercase tracking-widest text-[#B54825]">
+              Living Heritage Commons
+            </span>
+
+            <h2 className="font-editorial text-3xl sm:text-5xl font-medium tracking-tight text-white leading-tight">
+              Know something Lagos should remember?
+            </h2>
+
+            <p className="text-base sm:text-lg text-[#C7C3B3] font-light leading-relaxed">
+              Help document a place, festival, tradition, craft or story from your community. Write naturally in your own voice — our verification protocol helps preserve its origin.
+            </p>
+
+            <div className="pt-3">
+              <Link
+                href="/contribute"
+                className="inline-flex items-center gap-2 bg-[#B4441F] hover:bg-[#8F3314] text-white font-medium text-sm sm:text-base px-6 py-3.5 rounded-sm transition-colors"
+              >
+                <span>Contribute what you know</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Shared Claim Drawer */}
+      <ClaimDrawer
+        claim={selectedClaim}
+        assetName={eyoAsset.name}
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+      />
     </div>
   );
 }
