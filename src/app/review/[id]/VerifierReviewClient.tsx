@@ -57,12 +57,12 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
   ).length;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
-      {/* Back button */}
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 space-y-6 sm:space-y-8">
+      {/* Back button with min 44px touch target */}
       <div>
         <Link
           href="/explore"
-          className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#73736C] hover:text-[#161615] transition-colors"
+          className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#73736C] hover:text-[#161615] transition-colors py-2 focus:outline-none focus:ring-2 focus:ring-[#B4441F]"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Exit Verifier Workspace</span>
@@ -70,30 +70,30 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
       </div>
 
       {/* Header (Focused, not a SaaS dashboard) */}
-      <header className="space-y-3 border-b border-[#E8E3D8] pb-6">
+      <header className="space-y-3 border-b border-[#E8E3D8] pb-5">
         <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-[#EEF4F9] border border-[#C1D5E5] text-[#1B4163] text-xs font-mono font-medium rounded-sm">
           <span>Community Verifier Portal</span>
         </div>
 
-        <h1 className="font-editorial text-3xl sm:text-4xl font-medium tracking-tight text-[#161615]">
+        <h1 className="font-editorial text-2xl sm:text-4xl font-medium tracking-tight text-[#161615]">
           Review contribution
         </h1>
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-[#5A5954] gap-2 pt-1">
-          <div>
+          <div className="min-w-0">
             <span className="font-mono text-[#8C887B]">Record: </span>
-            <strong className="text-[#161615] font-semibold">{submission.assetTitle}</strong>
+            <strong className="text-[#161615] font-semibold break-words">{submission.assetTitle}</strong>
           </div>
-          <div>
+          <div className="min-w-0">
             <span className="font-mono text-[#8C887B]">Submitted by: </span>
-            <span className="font-medium text-[#161615]">Community contributor ({submission.submittedBy})</span>
+            <span className="font-medium text-[#161615] break-words">{submission.submittedBy}</span>
           </div>
         </div>
       </header>
 
       {/* Verification Claim View (One claim at a time) */}
       {!isCompleted ? (
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Progress Indicator */}
           <div className="flex items-center justify-between text-xs font-mono text-[#73736C]">
             <span className="text-[#B4441F] font-semibold uppercase">
@@ -104,20 +104,20 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
             </span>
           </div>
 
-          <div className="w-full bg-[#E8E3D8] h-1 rounded-full overflow-hidden">
+          <div className="w-full bg-[#E8E3D8] h-1.5 rounded-full overflow-hidden">
             <div
-              className="bg-[#B4441F] h-1 transition-all duration-300"
+              className="bg-[#B4441F] h-1.5 transition-all duration-300"
               style={{ width: `${((currentIndex + 1) / totalClaims) * 100}%` }}
             />
           </div>
 
           {/* Current Claim Card */}
-          <div className="bg-white border border-[#E8E3D8] rounded-sm p-6 sm:p-8 space-y-6">
+          <div className="bg-white border border-[#E8E3D8] rounded-sm p-4 sm:p-7 space-y-5">
             <div className="space-y-2">
-              <span className="text-xs font-mono uppercase tracking-widest text-[#8C887B]">
+              <span className="text-[11px] font-mono uppercase tracking-widest text-[#8C887B]">
                 {currentClaim.title}
               </span>
-              <p className="font-editorial text-xl sm:text-2xl text-[#161615] leading-snug">
+              <p className="font-editorial text-lg sm:text-2xl text-[#161615] leading-snug break-words">
                 “{currentClaim.statement}”
               </p>
               {currentClaim.clarificationPrompt && (
@@ -136,11 +136,11 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
                 {submission.evidence.map((ev) => (
                   <li key={ev.id} className="flex items-center gap-2">
                     {ev.type === 'photo' ? (
-                      <Camera className="w-3.5 h-3.5 text-[#B4441F]" />
+                      <Camera className="w-3.5 h-3.5 text-[#B4441F] shrink-0" />
                     ) : (
-                      <FileText className="w-3.5 h-3.5 text-[#1C3F5E]" />
+                      <FileText className="w-3.5 h-3.5 text-[#1C3F5E] shrink-0" />
                     )}
-                    <span className="font-mono text-[#161615]">{ev.name}</span>
+                    <span className="font-mono text-[#161615] break-words">{ev.name}</span>
                   </li>
                 ))}
               </ul>
@@ -155,16 +155,16 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
             </div>
           </div>
 
-          {/* Action Decision Buttons */}
-          <div className="space-y-3">
+          {/* Action Decision Buttons (Min 48px touch target on mobile) */}
+          <div className="space-y-2.5">
             <span className="block text-xs font-mono uppercase tracking-wider text-[#73736C]">
               Verification Verdict
             </span>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
               <button
                 type="button"
                 onClick={() => handleDecision('confirmed')}
-                className="p-4 bg-[#EEF7F2] hover:bg-[#D9EFE2] border border-[#C2E2CE] text-[#1E5C3E] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-colors"
+                className="min-h-[48px] p-3.5 bg-[#EEF7F2] hover:bg-[#D9EFE2] border border-[#C2E2CE] text-[#1E5C3E] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-2 focus:ring-[#1E5C3E]"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Confirm</span>
@@ -173,7 +173,7 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
               <button
                 type="button"
                 onClick={() => handleDecision('needs-correction')}
-                className="p-4 bg-[#FAF4E7] hover:bg-[#F3E7CA] border border-[#E8DCBF] text-[#734F18] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-colors"
+                className="min-h-[48px] p-3.5 bg-[#FAF4E7] hover:bg-[#F3E7CA] border border-[#E8DCBF] text-[#734F18] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-2 focus:ring-[#734F18]"
               >
                 <AlertCircle className="w-4 h-4" />
                 <span>Needs correction</span>
@@ -182,7 +182,7 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
               <button
                 type="button"
                 onClick={() => handleDecision('cant-verify')}
-                className="p-4 bg-[#FAF9F5] hover:bg-[#F2ECE1] border border-[#D4CEBF] text-[#5A5954] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-colors"
+                className="min-h-[48px] p-3.5 bg-[#FAF9F5] hover:bg-[#F2ECE1] border border-[#D4CEBF] text-[#5A5954] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A5954]"
               >
                 <HelpCircle className="w-4 h-4" />
                 <span>Can&apos;t verify</span>

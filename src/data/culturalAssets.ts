@@ -9,8 +9,14 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     location: 'Lagos Island, Lagos',
     neighborhood: 'Isale Eko',
     summary: 'A sacred Yoruba masquerade procession honoring departed monarchs and inaugurating new eras in the heart of historic Lagos.',
-    coverImage: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=1600&auto=format&fit=crop',
-    coverImageAlt: 'White-robed ceremonial figures during cultural gathering in Lagos',
+    coverImage: '/images/cultural/eyo-festival.jpg',
+    coverImageAlt: 'Adamu Orisha Eyo masqueraders dressed in ceremonial white drapery and broad-brimmed Aga hats in Isale Eko, Lagos',
+    coverImagePosition: 'center 20%',
+    image: {
+      src: '/images/cultural/eyo-festival.jpg',
+      alt: 'Adamu Orisha Eyo masqueraders dressed in ceremonial white drapery and broad-brimmed Aga hats in Isale Eko, Lagos',
+      objectPosition: 'center 20%'
+    },
     facts: {
       when: 'Date not yet announced',
       where: 'Lagos Island',
@@ -242,8 +248,14 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     location: 'Lekki Phase 1, Lagos',
     neighborhood: 'Lekki Peninsula',
     summary: 'A towering five-storey sanctuary housing over 25,000 West African artworks, textiles, and wood carvings under the stewardship of Mama Nike Okundaye.',
-    coverImage: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=1600&auto=format&fit=crop',
-    coverImageAlt: 'African contemporary textiles and visual art in an open gallery space',
+    coverImage: '/images/cultural/nike-art-gallery.jpg',
+    coverImageAlt: 'The soaring four-story atrium of Nike Art Gallery in Lekki displaying thousands of Nigerian artworks, wooden totems, and indigo textiles',
+    coverImagePosition: 'center center',
+    image: {
+      src: '/images/cultural/nike-art-gallery.jpg',
+      alt: 'The soaring four-story atrium of Nike Art Gallery in Lekki displaying thousands of Nigerian artworks, wooden totems, and indigo textiles',
+      objectPosition: 'center center'
+    },
     facts: {
       when: 'Year-round',
       where: 'Lekki Phase 1, Lagos',
@@ -412,8 +424,14 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     location: 'Campos Square, Lagos Island',
     neighborhood: 'Popo Aguda (Brazilian Quarter)',
     summary: 'The historic Afro-Brazilian Caretta masquerade and brass band procession introduced by 19th-century returnees from Salvador da Bahia.',
-    coverImage: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1600&auto=format&fit=crop',
-    coverImageAlt: 'Street festival celebration with vibrant music and celebratory atmosphere in Lagos',
+    coverImage: '/images/cultural/fanti-carnival.jpg',
+    coverImageAlt: 'Afro-Brazilian Caretta bull masquerade and costumed brass band parade in Campos Square, Popo Aguda, Lagos Island',
+    coverImagePosition: 'center 30%',
+    image: {
+      src: '/images/cultural/fanti-carnival.jpg',
+      alt: 'Afro-Brazilian Caretta bull masquerade and costumed brass band parade in Campos Square, Popo Aguda, Lagos Island',
+      objectPosition: 'center 30%'
+    },
     facts: {
       when: 'Easter Monday & Festive Seasons',
       where: 'Campos Square & Popo Aguda',
@@ -514,8 +532,14 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     location: 'Badagry & Ikorodu Yoruba Corridors',
     neighborhood: 'Badagry Division',
     summary: 'A UNESCO-recognized oral and masked performance honoring the primordial mothers (Iya Nla) and balancing communal harmony through artistic spectacle.',
-    coverImage: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1600&auto=format&fit=crop',
-    coverImageAlt: 'Intricate traditional wooden mask carving honoring ancestral traditions',
+    coverImage: '/images/cultural/gelede-festival.jpg',
+    coverImageAlt: 'Intricately carved Yoruba Gelede wooden mask headdress honoring ancestral mothers with traditional scarification and ceremonial superstructure',
+    coverImagePosition: 'center top',
+    image: {
+      src: '/images/cultural/gelede-festival.jpg',
+      alt: 'Intricately carved Yoruba Gelede wooden mask headdress honoring ancestral mothers with traditional scarification and ceremonial superstructure',
+      objectPosition: 'center top'
+    },
     facts: {
       when: 'Pre-planting season (March–May cycle)',
       where: 'Badagry & Ikorodu districts',
@@ -605,8 +629,14 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     location: 'Ahmadu Bello Way, Victoria Island',
     neighborhood: 'Victoria Island Waterfront',
     summary: 'A modern coastal celebration blending contemporary Lagos fashion, stilt acrobatics, street food parades, and coastal conservation awareness.',
-    coverImage: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1600&auto=format&fit=crop',
-    coverImageAlt: 'Lively contemporary street gathering along Lagos coastline with performance art',
+    coverImage: '/images/cultural/victoria-island-carnival.jpg',
+    coverImageAlt: 'Contemporary Lagos street arts and stilt acrobat performance parade along Ahmadu Bello Way, Victoria Island coastal boulevard',
+    coverImagePosition: 'center 40%',
+    image: {
+      src: '/images/cultural/victoria-island-carnival.jpg',
+      alt: 'Contemporary Lagos street arts and stilt acrobat performance parade along Ahmadu Bello Way, Victoria Island coastal boulevard',
+      objectPosition: 'center 40%'
+    },
     facts: {
       when: 'Mid-December Cultural Week',
       where: 'Ahmadu Bello Way, Victoria Island',
@@ -671,8 +701,14 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     location: 'Glover Road, Ikoyi & University of Suya, Ikeja',
     neighborhood: 'Ikoyi & Ikeja Corridors',
     summary: 'The nocturnal culinary heritage of skewered spiced meat, slow-smoked over charcoal embers and seasoned with generations-old northern Yaji recipes.',
-    coverImage: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1600&auto=format&fit=crop',
-    coverImageAlt: 'Charcoal grilled spiced skewers with onions and aromatic seasoning',
+    coverImage: '/images/cultural/lagos-suya-heritage.jpg',
+    coverImageAlt: 'Mai suya grilling paper-thin spiced beef skewers over open charcoal hearth embers with yaji spice and sliced purple onions at night',
+    coverImagePosition: 'center center',
+    image: {
+      src: '/images/cultural/lagos-suya-heritage.jpg',
+      alt: 'Mai suya grilling paper-thin spiced beef skewers over open charcoal hearth embers with yaji spice and sliced purple onions at night',
+      objectPosition: 'center center'
+    },
     facts: {
       when: 'Nightly, 18:00 to 02:00',
       where: 'Ikoyi, Ikeja & Surulere street hearths',
@@ -771,8 +807,14 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     location: 'Itire & Isale Eko Textile Corridors',
     neighborhood: 'Mainland & Island Corridors',
     summary: 'The intricate Yoruba resist-dyeing art using fermented cassava starch (lafun) stencils and natural Indigofera tinctoria leaf pits.',
-    coverImage: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=1600&auto=format&fit=crop',
-    coverImageAlt: 'Rich indigo dyed cloth with traditional resist patterns hanging in workshop',
+    coverImage: '/images/cultural/adire-eleko-craft.jpg',
+    coverImageAlt: 'Artisanal Yoruba Adire Eleko workshop with dyed indigo cotton cloths displaying delicate cassava starch resist patterns',
+    coverImagePosition: 'center 35%',
+    image: {
+      src: '/images/cultural/adire-eleko-craft.jpg',
+      alt: 'Artisanal Yoruba Adire Eleko workshop with dyed indigo cotton cloths displaying delicate cassava starch resist patterns',
+      objectPosition: 'center 35%'
+    },
     facts: {
       when: 'Year-round workshops',
       where: 'Itire, Surulere & Isale Eko',
@@ -842,8 +884,14 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     location: 'Lagos Lagoon, Yaba Coast',
     neighborhood: 'Yaba Waterfront',
     summary: 'Centuries of indigenous Egun aquatic engineering, wooden canoe transport, and sustainable artisanal fishing thriving above the calm waters of the Lagos Lagoon.',
-    coverImage: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1600&auto=format&fit=crop',
-    coverImageAlt: 'Canoes and waterfront living on the tranquil lagoon waters',
+    coverImage: '/images/cultural/makoko-waterfront-heritage.jpg',
+    coverImageAlt: 'Traditional timber stilt houses elevated above the calm Lagos Lagoon in Makoko with wooden dugout canoes on the water',
+    coverImagePosition: 'center 40%',
+    image: {
+      src: '/images/cultural/makoko-waterfront-heritage.jpg',
+      alt: 'Traditional timber stilt houses elevated above the calm Lagos Lagoon in Makoko with wooden dugout canoes on the water',
+      objectPosition: 'center 40%'
+    },
     facts: {
       when: 'Continuous historic settlement',
       where: 'Yaba Lagoon Waterfront',

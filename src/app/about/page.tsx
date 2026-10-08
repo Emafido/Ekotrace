@@ -104,7 +104,7 @@ export default function AboutPage() {
         </div>
         <Link
           href="/contribute"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-[#161615] hover:bg-[#B4441F] text-white text-xs sm:text-sm font-medium rounded-sm transition-colors whitespace-nowrap"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] w-full sm:w-auto bg-[#161615] hover:bg-[#B4441F] text-white text-xs sm:text-sm font-medium rounded-sm transition-colors whitespace-nowrap"
         >
           <span>Share what you know</span>
           <ArrowRight className="w-3.5 h-3.5" />

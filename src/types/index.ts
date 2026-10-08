@@ -118,6 +118,12 @@ export interface CulturalAsset {
   story: EditorialStory;
   coverImage: string;
   coverImageAlt: string;
+  coverImagePosition?: string;
+  image?: {
+    src: string;
+    alt: string;
+    objectPosition?: string;
+  };
   galleryImages?: { url: string; caption: string }[];
   facts: CulturalFacts;
   claims: Claim[];

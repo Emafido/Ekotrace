@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { Claim } from '@/types';
 import { VerificationBadge } from './VerificationBadge';
-import { X, Calendar, UserCheck, BookOpen, FileText, Camera, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
+import { X, Calendar, UserCheck, BookOpen, FileText, Camera, ArrowRight, ShieldAlert } from 'lucide-react';
 
 interface ClaimDrawerProps {
   claim: Claim | null;
@@ -22,14 +22,24 @@ export const ClaimDrawer: React.FC<ClaimDrawerProps> = ({
   // Lock background scroll when drawer is open
   useEffect(() => {
     if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [isOpen]);
+
+  // Handle ESC key to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen || !claim) return null;
 
@@ -44,66 +54,75 @@ export const ClaimDrawer: React.FC<ClaimDrawerProps> = ({
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#161615]/40 backdrop-blur-[2px] transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-[#161615]/50 backdrop-blur-[2px] transition-opacity animate-in fade-in duration-200"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Drawer Container (Right side on desktop, bottom sheet on mobile) */}
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
-        <div className="w-screen max-w-lg bg-[#FAF9F5] border-l border-[#E5E0D2] shadow-2xl flex flex-col justify-between overflow-y-auto transform transition-transform animate-in slide-in-from-right duration-300">
+      {/* Responsive Sheet: Bottom Sheet on Mobile (<640px), Right Drawer on Desktop (>=640px) */}
+      <div className="fixed inset-x-0 bottom-0 max-h-[92vh] sm:max-h-full sm:inset-y-0 sm:right-0 sm:left-auto sm:w-full sm:max-w-lg z-10 flex">
+        <div className="w-full bg-[#FAF9F5] rounded-t-2xl sm:rounded-none border-t sm:border-t-0 sm:border-l border-[#E5E0D2] shadow-2xl flex flex-col justify-between overflow-hidden animate-in slide-in-from-bottom sm:slide-in-from-right duration-300">
+          
+          {/* Mobile Drag Indicator Bar */}
+          <div className="sm:hidden pt-3 pb-1 flex justify-center bg-[#F5F1E8]/90">
+            <div className="w-12 h-1.5 bg-[#D4CEBF] rounded-full" />
+          </div>
+
           {/* Header */}
-          <div className="p-6 border-b border-[#E8E3D8] bg-[#F5F1E8]/70 flex items-start justify-between sticky top-0 z-10 backdrop-blur-sm">
-            <div>
-              <div className="flex items-center gap-2 mb-1.5">
+          <div className="p-4 sm:p-6 border-b border-[#E8E3D8] bg-[#F5F1E8]/80 flex items-start justify-between sticky top-0 z-20 backdrop-blur-sm">
+            <div className="space-y-1 pr-3">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[11px] font-mono uppercase tracking-widest text-[#73736C]">
                   Verification Provenance
                 </span>
                 <span className="text-[11px] text-[#A6A296]">•</span>
-                <span className="text-[11px] font-medium text-[#73736C] truncate max-w-[200px]">
+                <span className="text-[11px] font-medium text-[#73736C] truncate max-w-[180px] sm:max-w-[240px]">
                   {assetName}
                 </span>
               </div>
-              <h2 id="drawer-claim-title" className="text-sm font-semibold text-[#161615]">
+              <h2 id="drawer-claim-title" className="text-sm sm:text-base font-semibold text-[#161615]">
                 Claim Origin & Sources
               </h2>
             </div>
+            
+            {/* Min 44px touch target close button */}
             <button
               onClick={onClose}
-              className="p-1.5 text-[#5A5954] hover:text-[#161615] hover:bg-[#EAE4D7] rounded-sm transition-colors"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-[#5A5954] hover:text-[#161615] hover:bg-[#EAE4D7] rounded-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#B4441F]"
               aria-label="Close claim drawer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Drawer Body */}
-          <div className="p-6 sm:p-8 space-y-8 flex-1">
+          {/* Scrollable Body */}
+          <div className="p-5 sm:p-8 space-y-6 sm:space-y-8 flex-1 overflow-y-auto overscroll-contain">
+            
             {/* Primary Claim Statement */}
             <div className="space-y-3">
-              <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center justify-between gap-2 flex-wrap">
                 <span className="text-xs font-mono uppercase tracking-wider text-[#8A8679]">
                   Claim Statement
                 </span>
                 <VerificationBadge status={claim.status} size="md" />
               </div>
 
-              <div className="p-4 bg-white border border-[#E2DDD0] rounded-sm">
-                <p className="font-editorial text-lg sm:text-xl text-[#161615] leading-snug">
+              <div className="p-4 sm:p-5 bg-white border border-[#E2DDD0] rounded-sm">
+                <p className="font-editorial text-lg sm:text-xl text-[#161615] leading-snug break-words">
                   “{claim.statement}”
                 </p>
                 {claim.value && !isConflicting && (
-                  <div className="mt-2.5 pt-2.5 border-t border-[#F2ECE1] flex items-center justify-between text-xs text-[#5A5954]">
+                  <div className="mt-3 pt-3 border-t border-[#F2ECE1] flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs text-[#5A5954]">
                     <span className="font-mono text-[#8C887B]">Documented Value:</span>
-                    <span className="font-medium text-[#161615]">{claim.value}</span>
+                    <span className="font-medium text-[#161615] break-words">{claim.value}</span>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* CONFLICTING STATE: Competing Points */}
+            {/* CONFLICTING STATE: Competing Points stacked cleanly for mobile */}
             {isConflicting && claim.conflictDetails && (
-              <div className="space-y-4 p-5 bg-[#FDF5F1] border border-[#F2D4C8] rounded-sm">
+              <div className="space-y-4 p-4 sm:p-5 bg-[#FDF5F1] border border-[#F2D4C8] rounded-sm">
                 <div className="flex items-center gap-2 text-[#8E361D]">
                   <ShieldAlert className="w-4 h-4 shrink-0" />
                   <h3 className="text-xs font-mono uppercase tracking-wider font-semibold">
@@ -111,43 +130,43 @@ export const ClaimDrawer: React.FC<ClaimDrawerProps> = ({
                   </h3>
                 </div>
 
-                <p className="text-xs text-[#63483E] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#63483E] leading-relaxed">
                   {claim.conflictDetails.description}
                 </p>
 
-                {/* Competing Points List */}
-                <div className="space-y-2.5 pt-1">
+                {/* Vertically Stacked Competing Points (Never squeezed into columns) */}
+                <div className="space-y-3 pt-1">
                   {claim.conflictDetails.competingPoints.map((point, index) => (
                     <div
                       key={index}
-                      className="p-3 bg-white border border-[#ECD1C5] rounded-sm text-xs space-y-1"
+                      className="p-3.5 bg-white border border-[#ECD1C5] rounded-sm text-xs space-y-1.5"
                     >
-                      <div className="flex items-center justify-between font-mono">
+                      <div className="flex items-center justify-between gap-2 flex-wrap font-mono">
                         <span className="font-semibold text-[#8E361D]">{point.sourceLabel}</span>
-                        <span className="px-2 py-0.5 bg-[#FAF2EE] text-[#8E361D] font-bold rounded-sm border border-[#F0D5C9]">
+                        <span className="px-2.5 py-1 bg-[#FAF2EE] text-[#8E361D] font-bold rounded-sm border border-[#F0D5C9]">
                           {point.claimValue}
                         </span>
                       </div>
-                      <p className="text-[#3F3E3A] font-medium">{point.sourceName}</p>
+                      <p className="text-[#3F3E3A] font-medium leading-snug">{point.sourceName}</p>
                       {point.note && (
-                        <p className="text-[#756E68] text-[11px] leading-normal">{point.note}</p>
+                        <p className="text-[#756E68] text-[11px] leading-normal pt-0.5">{point.note}</p>
                       )}
                     </div>
                   ))}
                 </div>
 
-                {/* Resolution notice */}
-                <div className="pt-2 border-t border-[#F1D7CD]">
-                  <p className="text-xs font-medium text-[#8E361D] italic mb-3">
+                {/* Resolution notice & Full-width CTA */}
+                <div className="pt-3 border-t border-[#F1D7CD] space-y-3">
+                  <p className="text-xs font-medium text-[#8E361D] italic leading-relaxed">
                     {claim.conflictDetails.resolutionNote}
                   </p>
                   <Link
                     href={`/contribute?claimId=${encodeURIComponent(claim.id)}&subject=${encodeURIComponent(claim.statement)}`}
                     onClick={onClose}
-                    className="inline-flex items-center justify-center w-full gap-2 px-4 py-2.5 bg-[#8E361D] hover:bg-[#722A16] text-[#FAF9F5] text-xs font-medium rounded-sm transition-colors"
+                    className="min-h-[44px] flex items-center justify-center w-full gap-2 px-4 py-3 bg-[#8E361D] hover:bg-[#722A16] text-[#FAF9F5] text-xs sm:text-sm font-medium rounded-sm transition-colors"
                   >
                     <span>Contribute an update</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
@@ -159,34 +178,34 @@ export const ClaimDrawer: React.FC<ClaimDrawerProps> = ({
                 Verification Details
               </h3>
               <div className="bg-white border border-[#E2DDD0] rounded-sm divide-y divide-[#F2ECE1] text-xs">
-                <div className="p-3 flex items-center justify-between">
+                <div className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                   <span className="text-[#73736C] flex items-center gap-1.5">
-                    <UserCheck className="w-3.5 h-3.5 text-[#8C887B]" />
-                    Verified by:
+                    <UserCheck className="w-3.5 h-3.5 text-[#8C887B] shrink-0" />
+                    <span>Verified by:</span>
                   </span>
-                  <span className="font-medium text-[#161615] text-right">
+                  <span className="font-medium text-[#161615] sm:text-right">
                     {claim.verification.verifierName}
                   </span>
                 </div>
-                <div className="p-3 flex items-center justify-between">
+                <div className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                   <span className="text-[#73736C]">Role / Desk:</span>
-                  <span className="text-[#484843] text-right font-mono text-[11px]">
+                  <span className="text-[#484843] sm:text-right font-mono text-[11px]">
                     {claim.verification.verifierRole}
                   </span>
                 </div>
-                <div className="p-3 flex items-center justify-between">
+                <div className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                   <span className="text-[#73736C] flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-[#8C887B]" />
-                    Last reviewed:
+                    <Calendar className="w-3.5 h-3.5 text-[#8C887B] shrink-0" />
+                    <span>Last reviewed:</span>
                   </span>
                   <span className="text-[#161615] font-mono text-[11px]">
                     {claim.lastReviewedAt}
                   </span>
                 </div>
                 {claim.verification.verificationNotes && (
-                  <div className="p-3 space-y-1 bg-[#FAF9F5]">
+                  <div className="p-3.5 space-y-1 bg-[#FAF9F5]">
                     <span className="text-[11px] font-mono text-[#8C887B] uppercase">Archival Notes:</span>
-                    <p className="text-[#484843] text-[11px] leading-relaxed">
+                    <p className="text-[#484843] text-[11px] sm:text-xs leading-relaxed break-words">
                       {claim.verification.verificationNotes}
                     </p>
                   </div>
@@ -194,7 +213,7 @@ export const ClaimDrawer: React.FC<ClaimDrawerProps> = ({
               </div>
             </div>
 
-            {/* Sources List */}
+            {/* Supporting Sources List */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-mono uppercase tracking-wider text-[#8A8679]">
@@ -214,19 +233,19 @@ export const ClaimDrawer: React.FC<ClaimDrawerProps> = ({
                       key={src.id || i}
                       className="p-3.5 bg-white border border-[#E2DDD0] rounded-sm space-y-1.5 hover:border-[#C4BEAF] transition-colors"
                     >
-                      <div className="flex items-start gap-2">
+                      <div className="flex items-start gap-2.5">
                         <BookOpen className="w-4 h-4 text-[#B4441F] shrink-0 mt-0.5" />
-                        <div className="space-y-0.5 flex-1">
-                          <p className="text-xs font-medium text-[#161615] leading-snug">
+                        <div className="space-y-0.5 flex-1 min-w-0">
+                          <p className="text-xs font-medium text-[#161615] leading-snug break-words">
                             {src.title}
                           </p>
-                          <p className="text-[11px] text-[#63625C]">
+                          <p className="text-[11px] text-[#63625C] break-words">
                             {src.authorOrOrg} {src.yearOrDate && `• ${src.yearOrDate}`}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 pt-1 border-t border-[#F5F0E6]">
-                        <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 bg-[#F4EFE6] text-[#69655D] rounded-sm">
+                      <div className="flex items-center gap-2 pt-1.5 border-t border-[#F5F0E6]">
+                        <span className="text-[10px] uppercase font-mono px-2 py-0.5 bg-[#F4EFE6] text-[#69655D] rounded-sm">
                           {src.type.replace('-', ' ')}
                         </span>
                       </div>
@@ -242,20 +261,20 @@ export const ClaimDrawer: React.FC<ClaimDrawerProps> = ({
                 <h3 className="text-xs font-mono uppercase tracking-wider text-[#8A8679]">
                   Physical & Digital Evidence ({claim.evidence.length})
                 </h3>
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   {claim.evidence.map((ev, i) => (
                     <div
                       key={ev.id || i}
-                      className="p-3 bg-white border border-[#E2DDD0] rounded-sm flex items-start gap-2.5"
+                      className="p-3.5 bg-white border border-[#E2DDD0] rounded-sm flex items-start gap-3"
                     >
                       {ev.type === 'photo' ? (
                         <Camera className="w-4 h-4 text-[#1C3F5E] shrink-0 mt-0.5" />
                       ) : (
                         <FileText className="w-4 h-4 text-[#1C3F5E] shrink-0 mt-0.5" />
                       )}
-                      <div className="space-y-0.5 text-xs">
-                        <p className="font-medium text-[#161615]">{ev.title}</p>
-                        <p className="text-[11px] text-[#69655D] leading-normal">
+                      <div className="space-y-0.5 text-xs flex-1 min-w-0">
+                        <p className="font-medium text-[#161615] break-words">{ev.title}</p>
+                        <p className="text-[11px] text-[#69655D] leading-relaxed break-words">
                           {ev.description}
                         </p>
                       </div>
@@ -266,14 +285,14 @@ export const ClaimDrawer: React.FC<ClaimDrawerProps> = ({
             )}
           </div>
 
-          {/* Drawer Footer */}
-          <div className="p-5 border-t border-[#E8E3D8] bg-[#F5F1E8]/70 flex items-center justify-between sticky bottom-0">
-            <span className="text-xs text-[#73736C]">
+          {/* Drawer Footer with large touch target */}
+          <div className="p-4 sm:p-5 border-t border-[#E8E3D8] bg-[#F5F1E8]/90 flex items-center justify-between sticky bottom-0 z-20 gap-3">
+            <span className="text-xs text-[#73736C] hidden sm:inline">
               EkoTrace verification protocol
             </span>
             <button
               onClick={onClose}
-              className="px-4 py-2 text-xs font-medium bg-[#161615] hover:bg-[#333] text-white rounded-sm transition-colors"
+              className="min-h-[44px] w-full sm:w-auto px-6 py-2.5 text-xs font-medium bg-[#161615] hover:bg-[#333] text-white rounded-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#B4441F]"
             >
               Close Drawer
             </button>

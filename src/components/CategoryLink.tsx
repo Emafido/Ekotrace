@@ -20,15 +20,15 @@ export const CategoryLink: React.FC<CategoryLinkProps> = ({
   return (
     <Link
       href={`/explore?category=${type}`}
-      className={`group block p-4 sm:p-5 border transition-all duration-200 ${
+      className={`group block p-3.5 sm:p-5 border transition-all duration-200 rounded-sm focus:outline-none focus:ring-2 focus:ring-[#B4441F] min-h-[44px] ${
         isActive
           ? 'bg-[#161615] text-[#FAF9F5] border-[#161615]'
           : 'bg-white hover:bg-[#FAF8F2] text-[#161615] border-[#E8E3D8] hover:border-[#CFC9BA]'
-      } rounded-sm`}
+      }`}
     >
-      <div className="flex items-center justify-between gap-2 mb-1">
+      <div className="flex items-center justify-between gap-1.5 mb-1">
         <span
-          className={`font-editorial text-lg sm:text-xl font-medium tracking-tight transition-colors ${
+          className={`font-editorial text-base sm:text-xl font-medium tracking-tight transition-colors ${
             isActive ? 'text-[#FAF9F5]' : 'group-hover:text-[#B4441F]'
           }`}
         >
@@ -36,7 +36,7 @@ export const CategoryLink: React.FC<CategoryLinkProps> = ({
         </span>
         {typeof count === 'number' && (
           <span
-            className={`text-xs font-mono px-2 py-0.5 rounded-sm ${
+            className={`text-[11px] font-mono px-1.5 py-0.5 rounded-sm shrink-0 ${
               isActive
                 ? 'bg-white/10 text-[#FAF9F5]'
                 : 'bg-[#F2ECE1] text-[#73736C]'
@@ -48,7 +48,7 @@ export const CategoryLink: React.FC<CategoryLinkProps> = ({
       </div>
       {description && (
         <p
-          className={`text-xs line-clamp-2 leading-relaxed ${
+          className={`text-[11px] sm:text-xs line-clamp-2 leading-relaxed ${
             isActive ? 'text-[#DCD7CA]' : 'text-[#73736C]'
           }`}
         >

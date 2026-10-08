@@ -227,32 +227,32 @@ function ContributeContent() {
                 </span>
               </div>
 
-              {/* Action Buttons */}
+              {/* Action Buttons with min 44px touch targets */}
               <div className="flex items-center gap-2.5 flex-wrap">
                 <button
                   type="button"
                   onClick={() => handleAddEvidence('photo')}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#FAF9F5] hover:bg-[#F2ECE1] border border-[#DDD8CA] text-xs font-medium text-[#161615] rounded-sm transition-colors"
+                  className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2.5 bg-[#FAF9F5] hover:bg-[#F2ECE1] border border-[#DDD8CA] text-xs font-medium text-[#161615] rounded-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#B4441F]"
                 >
-                  <Camera className="w-3.5 h-3.5 text-[#B4441F]" />
+                  <Camera className="w-4 h-4 text-[#B4441F]" />
                   <span>Photo</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleAddEvidence('link')}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#FAF9F5] hover:bg-[#F2ECE1] border border-[#DDD8CA] text-xs font-medium text-[#161615] rounded-sm transition-colors"
+                  className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2.5 bg-[#FAF9F5] hover:bg-[#F2ECE1] border border-[#DDD8CA] text-xs font-medium text-[#161615] rounded-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#B4441F]"
                 >
-                  <LinkIcon className="w-3.5 h-3.5 text-[#1C3F5E]" />
+                  <LinkIcon className="w-4 h-4 text-[#1C3F5E]" />
                   <span>Link</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleAddEvidence('document')}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#FAF9F5] hover:bg-[#F2ECE1] border border-[#DDD8CA] text-xs font-medium text-[#161615] rounded-sm transition-colors"
+                  className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2.5 bg-[#FAF9F5] hover:bg-[#F2ECE1] border border-[#DDD8CA] text-xs font-medium text-[#161615] rounded-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#B4441F]"
                 >
-                  <FileText className="w-3.5 h-3.5 text-[#1E5C3E]" />
+                  <FileText className="w-4 h-4 text-[#1E5C3E]" />
                   <span>Document</span>
                 </button>
               </div>
@@ -494,45 +494,45 @@ function ContributeContent() {
                       </p>
                     </div>
 
-                    {/* Interactive date actions */}
+                    {/* Interactive date actions: stacked on mobile, row on tablet/desktop */}
                     {dateInputMode ? (
-                      <div className="flex items-center gap-2 pt-2">
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2">
                         <input
                           type="text"
                           value={tempDateInput}
                           onChange={(e) => setTempDateInput(e.target.value)}
                           placeholder="e.g. December 2026 or 15–20 December 2026"
-                          className="flex-1 px-3 py-2 bg-white border border-[#D4CEBF] text-xs rounded-sm focus:outline-none focus:border-[#B4441F]"
+                          className="min-h-[44px] flex-1 px-3 py-2 bg-white border border-[#D4CEBF] text-xs rounded-sm focus:outline-none focus:border-[#B4441F]"
                           autoFocus
                         />
                         <button
                           type="button"
                           onClick={handleSetSpecificDate}
-                          className="px-3 py-2 bg-[#161615] text-white text-xs font-medium rounded-sm"
+                          className="min-h-[44px] px-4 py-2 bg-[#161615] text-white text-xs font-medium rounded-sm"
                         >
                           Confirm
                         </button>
                         <button
                           type="button"
                           onClick={() => setDateInputMode(false)}
-                          className="px-2 py-2 text-xs text-[#73736C]"
+                          className="min-h-[44px] px-3 py-2 text-xs text-[#73736C]"
                         >
                           Cancel
                         </button>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-3 pt-1">
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1">
                         <button
                           type="button"
                           onClick={() => setDateInputMode(true)}
-                          className="px-3.5 py-2 bg-[#161615] hover:bg-[#333] text-white text-xs font-medium rounded-sm transition-colors"
+                          className="min-h-[44px] px-5 py-2.5 bg-[#161615] hover:bg-[#333] text-white text-xs sm:text-sm font-medium rounded-sm transition-colors text-center"
                         >
                           Add a date
                         </button>
                         <button
                           type="button"
                           onClick={handleLeaveDateUnknown}
-                          className="px-3.5 py-2 bg-white hover:bg-[#F2ECE1] border border-[#D4CEBF] text-[#161615] text-xs font-medium rounded-sm transition-colors"
+                          className="min-h-[44px] px-5 py-2.5 bg-white hover:bg-[#F2ECE1] border border-[#D4CEBF] text-[#161615] text-xs sm:text-sm font-medium rounded-sm transition-colors text-center"
                         >
                           Leave unknown
                         </button>
@@ -546,7 +546,7 @@ function ContributeContent() {
               return (
                 <div
                   key={claim.id}
-                  className="p-5 bg-white border border-[#E8E3D8] rounded-sm space-y-2 hover:border-[#BFB9A8] transition-colors"
+                  className="p-4 sm:p-5 bg-white border border-[#E8E3D8] rounded-sm space-y-2 hover:border-[#BFB9A8] transition-colors"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-mono uppercase tracking-wider text-[#8C887B]">
@@ -556,7 +556,7 @@ function ContributeContent() {
                       <Check className="w-3 h-3" /> Extracted
                     </span>
                   </div>
-                  <p className="font-editorial text-base text-[#161615]">
+                  <p className="font-editorial text-base sm:text-lg text-[#161615]">
                     “{claim.statement}”
                   </p>
                   {claim.value && (
@@ -585,14 +585,14 @@ function ContributeContent() {
               <label className="block text-xs font-mono uppercase tracking-wider text-[#161615] font-semibold">
                 Who does this knowledge belong to?
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
                 {(['My community', 'An organisation', 'Public/general information'] as const).map(
                   (opt) => (
                     <button
                       key={opt}
                       type="button"
                       onClick={() => setKnowledgeOwner(opt)}
-                      className={`p-3 text-xs font-medium text-left border rounded-sm transition-all ${
+                      className={`min-h-[44px] p-3 text-xs font-medium text-left border rounded-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#B4441F] ${
                         knowledgeOwner === opt
                           ? 'bg-[#161615] text-[#FAF9F5] border-[#161615]'
                           : 'bg-white hover:bg-[#FAF8F4] text-[#4A4944] border-[#D4CEBF]'
@@ -610,13 +610,13 @@ function ContributeContent() {
               <label className="block text-xs font-mono uppercase tracking-wider text-[#161615] font-semibold">
                 Can this information be publicly displayed?
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                 {(['Yes', "I'm unsure"] as const).map((opt) => (
                   <button
                     key={opt}
                     type="button"
                     onClick={() => setPublicDisplayPermission(opt)}
-                    className={`p-3 text-xs font-medium text-left border rounded-sm transition-all ${
+                    className={`min-h-[44px] p-3 text-xs font-medium text-left border rounded-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#B4441F] ${
                       publicDisplayPermission === opt
                         ? 'bg-[#161615] text-[#FAF9F5] border-[#161615]'
                         : 'bg-white hover:bg-[#FAF8F4] text-[#4A4944] border-[#D4CEBF]'
@@ -629,14 +629,14 @@ function ContributeContent() {
             </div>
           </div>
 
-          {/* Bottom Actions: Save draft / Submit for verification (NEVER Publish!) */}
-          <div className="pt-6 border-t border-[#E8E3D8] flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Bottom Actions: full-width on mobile */}
+          <div className="pt-6 border-t border-[#E8E3D8] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => {
                 alert('Draft saved locally in your browser.');
               }}
-              className="w-full sm:w-auto px-5 py-3 border border-[#D4CEBF] hover:bg-[#F2ECE1] text-[#161615] text-xs font-medium rounded-sm transition-colors"
+              className="min-h-[48px] w-full sm:w-auto px-6 py-3 border border-[#D4CEBF] hover:bg-[#F2ECE1] text-[#161615] text-xs sm:text-sm font-medium rounded-sm transition-colors text-center"
             >
               Save draft
             </button>
@@ -644,7 +644,7 @@ function ContributeContent() {
             <button
               type="button"
               onClick={() => setStep('submitted')}
-              className="w-full sm:w-auto px-8 py-3.5 bg-[#B4441F] hover:bg-[#8F3314] text-white text-xs sm:text-sm font-medium rounded-sm transition-colors flex items-center justify-center gap-2"
+              className="min-h-[48px] w-full sm:w-auto px-8 py-3.5 bg-[#B4441F] hover:bg-[#8F3314] text-white text-xs sm:text-sm font-medium rounded-sm transition-colors flex items-center justify-center gap-2"
             >
               <span>Submit for verification</span>
               <ArrowRight className="w-4 h-4" />
