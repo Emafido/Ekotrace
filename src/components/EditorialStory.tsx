@@ -19,7 +19,7 @@ export const EditorialStory: React.FC<EditorialStoryProps> = ({
           {title}
         </h2>
         <p className="text-xs font-mono uppercase tracking-widest text-[#8C887B] mt-1">
-          Archival Narrative & Cultural Context
+          Oral history & cultural context
         </p>
       </div>
 

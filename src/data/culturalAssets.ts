@@ -15,6 +15,8 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     image: {
       src: '/images/cultural/eyo-festival.jpg',
       alt: 'Adamu Orisha Eyo masqueraders dressed in ceremonial white drapery and broad-brimmed Aga hats in Isale Eko, Lagos',
+      credit: 'Community field documentation, Isale Eko',
+      type: 'documentary',
       objectPosition: 'center 20%'
     },
     facts: {
@@ -90,7 +92,7 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
           },
           {
             id: 'src-103',
-            title: 'Isale Eko Community Registry & Chieftaincy Elders Testimony',
+            title: 'Isale Eko Community & Chieftaincy Oral Testimony',
             type: 'community',
             authorOrOrg: 'Elders Council of Idumota and Enu Owa',
             yearOrDate: 'Verified 2026'
@@ -135,7 +137,7 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
           },
           {
             id: 'src-105',
-            title: 'Conclave Hat Coloration & Heraldry Registry',
+            title: 'Conclave Hat Coloration & Lineage Documentation',
             type: 'community',
             authorOrOrg: 'Iga Idunganran Documentation Unit',
             yearOrDate: '2023'
@@ -254,6 +256,8 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     image: {
       src: '/images/cultural/nike-art-gallery.jpg',
       alt: 'The soaring four-story atrium of Nike Art Gallery in Lekki displaying thousands of Nigerian artworks, wooden totems, and indigo textiles',
+      credit: 'Curatorial archive, Nike Art Gallery Lekki',
+      type: 'documentary',
       objectPosition: 'center center'
     },
     facts: {
@@ -430,6 +434,8 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     image: {
       src: '/images/cultural/fanti-carnival.jpg',
       alt: 'Afro-Brazilian Caretta bull masquerade and costumed brass band parade in Campos Square, Popo Aguda, Lagos Island',
+      credit: 'Popo Aguda Heritage Society field archive',
+      type: 'documentary',
       objectPosition: 'center 30%'
     },
     facts: {
@@ -538,6 +544,8 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     image: {
       src: '/images/cultural/gelede-festival.jpg',
       alt: 'Intricately carved Yoruba Gelede wooden mask headdress honoring ancestral mothers with traditional scarification and ceremonial superstructure',
+      credit: 'Yoruba traditional mask documentation',
+      type: 'documentary',
       objectPosition: 'center top'
     },
     facts: {
@@ -588,7 +596,7 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
             id: 'src-401',
             title: 'UNESCO Representative List of Intangible Cultural Heritage',
             type: 'archive',
-            authorOrOrg: 'UNESCO Heritage Registry',
+            authorOrOrg: 'UNESCO Intangible Cultural Heritage List (2008)',
             yearOrDate: '2008 Inscription'
           }
         ],
@@ -635,6 +643,8 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     image: {
       src: '/images/cultural/victoria-island-carnival.jpg',
       alt: 'Contemporary Lagos street arts and stilt acrobat performance parade along Ahmadu Bello Way, Victoria Island coastal boulevard',
+      credit: 'Lagos Waterfront Arts Initiative',
+      type: 'illustrative',
       objectPosition: 'center 40%'
     },
     facts: {
@@ -707,6 +717,8 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     image: {
       src: '/images/cultural/lagos-suya-heritage.jpg',
       alt: 'Mai suya grilling paper-thin spiced beef skewers over open charcoal hearth embers with yaji spice and sliced purple onions at night',
+      credit: 'Culinary field record, Lagos night foodways',
+      type: 'documentary',
       objectPosition: 'center center'
     },
     facts: {
@@ -813,6 +825,8 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     image: {
       src: '/images/cultural/adire-eleko-craft.jpg',
       alt: 'Artisanal Yoruba Adire Eleko workshop with dyed indigo cotton cloths displaying delicate cassava starch resist patterns',
+      credit: 'Yoruba textile guild workshop documentation',
+      type: 'documentary',
       objectPosition: 'center 35%'
     },
     facts: {
@@ -890,6 +904,8 @@ export const CULTURAL_ASSETS: CulturalAsset[] = [
     image: {
       src: '/images/cultural/makoko-waterfront-heritage.jpg',
       alt: 'Traditional timber stilt houses elevated above the calm Lagos Lagoon in Makoko with wooden dugout canoes on the water',
+      credit: 'Waterfront community documentation',
+      type: 'documentary',
       objectPosition: 'center 40%'
     },
     facts: {

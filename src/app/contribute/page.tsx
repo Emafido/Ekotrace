@@ -368,7 +368,7 @@ function ContributeContent() {
               Archival Parsing Engine
             </span>
             <h2 className="font-editorial text-3xl sm:text-4xl font-medium text-[#161615]">
-              Organising your contribution
+              Organising your contribution…
             </h2>
             <p className="text-xs text-[#73736C]">
               Extracting checkable claims and mapping provenance.
@@ -460,114 +460,129 @@ function ContributeContent() {
 
           {/* Extracted Claim Cards */}
           <div className="space-y-4">
-            {claims.map((claim) => {
-              if (claim.isUnknownDate) {
-                // THE CRITICAL MOMENT FOR 2026 DATE
+            {(() => {
+              const hasUnresolvedDate = claims.some((c) => c.isUnknownDate && !c.isDateResolved);
+
+              return claims.map((claim) => {
+                if (claim.isUnknownDate) {
+                  const isFocusActive = !claim.isDateResolved;
+                  // THE CRITICAL "WE WON'T GUESS" MOMENT
+                  return (
+                    <div
+                      key={claim.id}
+                      className={`p-6 bg-[#FAF4E7] rounded-sm space-y-4 transition-all duration-300 ${
+                        isFocusActive
+                          ? 'border-2 border-[#B4441F] ring-2 ring-[#B4441F]/20 shadow-md scale-[1.01] sm:scale-[1.015]'
+                          : 'border-2 border-[#D8C7A3]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-mono uppercase tracking-wider text-[#734F18] font-bold">
+                          {claim.title}
+                        </span>
+                        <span className={`px-2.5 py-0.5 text-[11px] font-mono rounded-sm ${
+                          claim.isDateResolved
+                            ? 'bg-[#E3EFE7] text-[#1E5C3E]'
+                            : 'bg-[#EFE3C8] text-[#734F18]'
+                        }`}>
+                          {claim.isDateResolved ? 'Resolved' : 'Needs confirmation'}
+                        </span>
+                      </div>
+
+                      <p className="text-sm text-[#4E4D47] leading-relaxed">
+                        {claim.statement}
+                      </p>
+
+                      <div className="p-3 bg-white/80 border border-[#D8C7A3] rounded-sm space-y-1">
+                        <p className="text-xs font-mono text-[#734F18]">
+                          Exact date: <strong className="font-semibold">{claim.userSpecifiedDate || 'Unknown'}</strong>
+                        </p>
+                      </div>
+
+                      {/* Prominent rule sentence with subtle terracotta emphasis */}
+                      <div className="p-3.5 bg-white border-l-4 border-[#B4441F] rounded-sm">
+                        <p className="text-sm font-editorial font-medium text-[#161615]">
+                          “We won’t guess information you didn’t provide.”
+                        </p>
+                      </div>
+
+                      {/* Interactive date actions: stacked on mobile, row on tablet/desktop */}
+                      {dateInputMode ? (
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2">
+                          <input
+                            type="text"
+                            value={tempDateInput}
+                            onChange={(e) => setTempDateInput(e.target.value)}
+                            placeholder="e.g. December 2026 or 15–20 December 2026"
+                            className="min-h-[44px] flex-1 px-3 py-2 bg-white border border-[#D4CEBF] text-xs rounded-sm focus:outline-none focus:border-[#B4441F]"
+                            autoFocus
+                          />
+                          <button
+                            type="button"
+                            onClick={handleSetSpecificDate}
+                            className="min-h-[44px] px-5 py-2 bg-[#B4441F] hover:bg-[#8F3314] text-white text-xs font-medium rounded-sm transition-colors"
+                          >
+                            Confirm
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDateInputMode(false)}
+                            className="min-h-[44px] px-3 py-2 text-xs text-[#73736C]"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => setDateInputMode(true)}
+                            className="min-h-[44px] px-5 py-2.5 bg-[#B4441F] hover:bg-[#8F3314] text-white text-xs sm:text-sm font-medium rounded-sm transition-colors text-center"
+                          >
+                            Add a date
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleLeaveDateUnknown}
+                            className="min-h-[44px] px-5 py-2.5 bg-white hover:bg-[#F2ECE1] border border-[#D4CEBF] text-[#161615] text-xs sm:text-sm font-medium rounded-sm transition-colors text-center"
+                          >
+                            Leave unknown
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                // Standard extracted claim card: dimmed while the unknown moment is unresolved
                 return (
                   <div
                     key={claim.id}
-                    className="p-6 bg-[#FAF4E7] border-2 border-[#D8C7A3] rounded-sm space-y-4"
+                    className={`p-4 sm:p-5 bg-white border border-[#E8E3D8] rounded-sm space-y-2 hover:border-[#BFB9A8] transition-all duration-300 ${
+                      hasUnresolvedDate ? 'opacity-65' : 'opacity-100'
+                    }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono uppercase tracking-wider text-[#734F18] font-bold">
+                      <span className="text-[11px] font-mono uppercase tracking-wider text-[#8C887B]">
                         {claim.title}
                       </span>
-                      <span className="px-2 py-0.5 text-[11px] font-mono bg-[#EFE3C8] text-[#734F18] rounded-sm">
-                        Unresolved
+                      <span className="text-xs font-mono text-[#1E5C3E] flex items-center gap-1">
+                        <Check className="w-3 h-3" /> Extracted
                       </span>
                     </div>
-
-                    <p className="text-sm text-[#4E4D47] leading-relaxed">
-                      {claim.statement}
+                    <p className="font-editorial text-base sm:text-lg text-[#161615]">
+                      “{claim.statement}”
                     </p>
-
-                    <div className="p-3 bg-white/80 border border-[#D8C7A3] rounded-sm space-y-1">
-                      <p className="text-xs font-mono text-[#734F18]">
-                        Exact date: <strong className="font-semibold">{claim.userSpecifiedDate || 'Unknown'}</strong>
-                      </p>
-                    </div>
-
-                    {/* Prominent rule sentence */}
-                    <div className="p-3 bg-white border-l-4 border-[#B4441F] rounded-sm">
-                      <p className="text-sm font-editorial font-medium text-[#161615]">
-                        “We won’t guess information you didn’t provide.”
-                      </p>
-                    </div>
-
-                    {/* Interactive date actions: stacked on mobile, row on tablet/desktop */}
-                    {dateInputMode ? (
-                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2">
-                        <input
-                          type="text"
-                          value={tempDateInput}
-                          onChange={(e) => setTempDateInput(e.target.value)}
-                          placeholder="e.g. December 2026 or 15–20 December 2026"
-                          className="min-h-[44px] flex-1 px-3 py-2 bg-white border border-[#D4CEBF] text-xs rounded-sm focus:outline-none focus:border-[#B4441F]"
-                          autoFocus
-                        />
-                        <button
-                          type="button"
-                          onClick={handleSetSpecificDate}
-                          className="min-h-[44px] px-4 py-2 bg-[#161615] text-white text-xs font-medium rounded-sm"
-                        >
-                          Confirm
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setDateInputMode(false)}
-                          className="min-h-[44px] px-3 py-2 text-xs text-[#73736C]"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1">
-                        <button
-                          type="button"
-                          onClick={() => setDateInputMode(true)}
-                          className="min-h-[44px] px-5 py-2.5 bg-[#161615] hover:bg-[#333] text-white text-xs sm:text-sm font-medium rounded-sm transition-colors text-center"
-                        >
-                          Add a date
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleLeaveDateUnknown}
-                          className="min-h-[44px] px-5 py-2.5 bg-white hover:bg-[#F2ECE1] border border-[#D4CEBF] text-[#161615] text-xs sm:text-sm font-medium rounded-sm transition-colors text-center"
-                        >
-                          Leave unknown
-                        </button>
+                    {claim.value && (
+                      <div className="pt-2 border-t border-[#F5F0E6] flex items-center justify-between text-xs text-[#5A5954]">
+                        <span className="font-mono text-[#8C887B]">Tagged Value:</span>
+                        <span className="font-medium text-[#161615]">{claim.value}</span>
                       </div>
                     )}
                   </div>
                 );
-              }
-
-              // Standard extracted claim card
-              return (
-                <div
-                  key={claim.id}
-                  className="p-4 sm:p-5 bg-white border border-[#E8E3D8] rounded-sm space-y-2 hover:border-[#BFB9A8] transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono uppercase tracking-wider text-[#8C887B]">
-                      {claim.title}
-                    </span>
-                    <span className="text-xs font-mono text-[#1E5C3E] flex items-center gap-1">
-                      <Check className="w-3 h-3" /> Extracted
-                    </span>
-                  </div>
-                  <p className="font-editorial text-base sm:text-lg text-[#161615]">
-                    “{claim.statement}”
-                  </p>
-                  {claim.value && (
-                    <div className="pt-2 border-t border-[#F5F0E6] flex items-center justify-between text-xs text-[#5A5954]">
-                      <span className="font-mono text-[#8C887B]">Tagged Value:</span>
-                      <span className="font-medium text-[#161615]">{claim.value}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+              });
+            })()}
           </div>
 
           {/* ===================================================================

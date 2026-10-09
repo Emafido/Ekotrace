@@ -107,6 +107,16 @@ export interface CulturalFacts {
   category: string;
 }
 
+export type CulturalImage = {
+  src: string;
+  alt: string;
+  credit?: string;
+  sourceUrl?: string;
+  license?: string;
+  type: 'documentary' | 'illustrative';
+  objectPosition?: string;
+};
+
 export interface CulturalAsset {
   id: string;
   slug: string;
@@ -119,11 +129,7 @@ export interface CulturalAsset {
   coverImage: string;
   coverImageAlt: string;
   coverImagePosition?: string;
-  image?: {
-    src: string;
-    alt: string;
-    objectPosition?: string;
-  };
+  image?: CulturalImage;
   galleryImages?: { url: string; caption: string }[];
   facts: CulturalFacts;
   claims: Claim[];

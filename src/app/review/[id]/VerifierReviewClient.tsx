@@ -1,20 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
-import { ContributionSubmission, ExtractedClaimItem } from '@/types';
+import { ContributionSubmission } from '@/types';
 import { 
   CheckCircle2, 
   AlertCircle, 
   HelpCircle, 
   ArrowLeft, 
-  ArrowRight, 
-  FileText, 
   Camera, 
-  ShieldCheck, 
+  FileText, 
   Check, 
   RotateCcw 
 } from 'lucide-react';
+import { motion, gsap, prefersReducedMotion } from '@/lib/motion';
 
 interface VerifierReviewClientProps {
   submission: ContributionSubmission;
@@ -28,19 +27,63 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [decisions, setDecisions] = useState<Record<string, Decision>>({});
   const [isCompleted, setIsCompleted] = useState(false);
+  const [animatingDecision, setAnimatingDecision] = useState<Decision | null>(null);
+
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const claims = submission.extractedClaims;
   const currentClaim = claims[currentIndex];
   const totalClaims = claims.length;
 
   const handleDecision = (decision: Decision) => {
+    if (animatingDecision) return; // Prevent double clicks
+    setAnimatingDecision(decision);
+
     const updated = { ...decisions, [currentClaim.id]: decision };
     setDecisions(updated);
 
-    if (currentIndex + 1 < totalClaims) {
-      setCurrentIndex(currentIndex + 1);
+    const isReduced = prefersReducedMotion();
+
+    if (isReduced) {
+      if (currentIndex + 1 < totalClaims) {
+        setCurrentIndex(currentIndex + 1);
+        setAnimatingDecision(null);
+      } else {
+        setIsCompleted(true);
+        setAnimatingDecision(null);
+      }
+      return;
+    }
+
+    // Trust Mode: calm, deliberate transition (no bounce, no confetti)
+    if (cardRef.current) {
+      gsap.to(cardRef.current, {
+        opacity: 0.2,
+        y: -6,
+        duration: motion.fast,
+        ease: motion.trustEase,
+        onComplete: () => {
+          if (currentIndex + 1 < totalClaims) {
+            setCurrentIndex((prev) => prev + 1);
+            setAnimatingDecision(null);
+            gsap.fromTo(
+              cardRef.current,
+              { opacity: 0.2, y: 8 },
+              { opacity: 1, y: 0, duration: motion.normal, ease: motion.trustEase }
+            );
+          } else {
+            setIsCompleted(true);
+            setAnimatingDecision(null);
+          }
+        },
+      });
     } else {
-      setIsCompleted(true);
+      if (currentIndex + 1 < totalClaims) {
+        setCurrentIndex(currentIndex + 1);
+      } else {
+        setIsCompleted(true);
+      }
+      setAnimatingDecision(null);
     }
   };
 
@@ -48,6 +91,7 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
     setDecisions({});
     setCurrentIndex(0);
     setIsCompleted(false);
+    setAnimatingDecision(null);
   };
 
   // Summary counts
@@ -72,7 +116,7 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
       {/* Header (Focused, not a SaaS dashboard) */}
       <header className="space-y-3 border-b border-[#E8E3D8] pb-5">
         <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-[#EEF4F9] border border-[#C1D5E5] text-[#1B4163] text-xs font-mono font-medium rounded-sm">
-          <span>Community Verifier Portal</span>
+          <span>Community Verifier Workspace</span>
         </div>
 
         <h1 className="font-editorial text-2xl sm:text-4xl font-medium tracking-tight text-[#161615]">
@@ -92,7 +136,7 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
       </header>
 
       {/* Verification Claim View (One claim at a time) */}
-      {!isCompleted ? (
+      {!isCompleted && currentClaim ? (
         <div className="space-y-6 sm:space-y-8">
           {/* Progress Indicator */}
           <div className="flex items-center justify-between text-xs font-mono text-[#73736C]">
@@ -112,11 +156,28 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
           </div>
 
           {/* Current Claim Card */}
-          <div className="bg-white border border-[#E8E3D8] rounded-sm p-4 sm:p-7 space-y-5">
+          <div
+            ref={cardRef}
+            className="bg-white border border-[#E8E3D8] rounded-sm p-4 sm:p-7 space-y-5 transition-shadow"
+          >
             <div className="space-y-2">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-[#8C887B]">
-                {currentClaim.title}
-              </span>
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <span className="text-[11px] font-mono uppercase tracking-widest text-[#8C887B]">
+                  {currentClaim.title}
+                </span>
+                {animatingDecision && (
+                  <span className={`text-[11px] font-mono px-2 py-0.5 rounded-sm ${
+                    animatingDecision === 'confirmed' 
+                      ? 'bg-[#EEF7F2] text-[#1E5C3E]' 
+                      : animatingDecision === 'needs-correction'
+                      ? 'bg-[#FAF4E7] text-[#734F18]'
+                      : 'bg-[#F2ECE1] text-[#5A5954]'
+                  }`}>
+                    {animatingDecision === 'confirmed' ? '✓ Confirmed' : animatingDecision === 'needs-correction' ? 'Needs correction' : "Can't verify"}
+                  </span>
+                )}
+              </div>
+
               <p className="font-editorial text-lg sm:text-2xl text-[#161615] leading-snug break-words">
                 “{currentClaim.statement}”
               </p>
@@ -164,35 +225,38 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
               <button
                 type="button"
                 onClick={() => handleDecision('confirmed')}
-                className="min-h-[48px] p-3.5 bg-[#EEF7F2] hover:bg-[#D9EFE2] border border-[#C2E2CE] text-[#1E5C3E] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-2 focus:ring-[#1E5C3E]"
+                disabled={Boolean(animatingDecision)}
+                className="min-h-[48px] p-3.5 bg-[#EEF7F2] hover:bg-[#D9EFE2] border border-[#C2E2CE] text-[#1E5C3E] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#1E5C3E] disabled:opacity-60"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Confirm</span>
+                <span>{animatingDecision === 'confirmed' ? '✓ Confirmed' : 'Confirm'}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleDecision('needs-correction')}
-                className="min-h-[48px] p-3.5 bg-[#FAF4E7] hover:bg-[#F3E7CA] border border-[#E8DCBF] text-[#734F18] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-2 focus:ring-[#734F18]"
+                disabled={Boolean(animatingDecision)}
+                className="min-h-[48px] p-3.5 bg-[#FAF4E7] hover:bg-[#F3E7CA] border border-[#E8DCBF] text-[#734F18] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#734F18] disabled:opacity-60"
               >
                 <AlertCircle className="w-4 h-4" />
-                <span>Needs correction</span>
+                <span>{animatingDecision === 'needs-correction' ? 'Marked for correction' : 'Needs correction'}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleDecision('cant-verify')}
-                className="min-h-[48px] p-3.5 bg-[#FAF9F5] hover:bg-[#F2ECE1] border border-[#D4CEBF] text-[#5A5954] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A5954]"
+                disabled={Boolean(animatingDecision)}
+                className="min-h-[48px] p-3.5 bg-[#FAF9F5] hover:bg-[#F2ECE1] border border-[#D4CEBF] text-[#5A5954] rounded-sm text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#5A5954] disabled:opacity-60"
               >
                 <HelpCircle className="w-4 h-4" />
-                <span>Can&apos;t verify</span>
+                <span>{animatingDecision === 'cant-verify' ? 'Marked unverified' : "Can't verify"}</span>
               </button>
             </div>
           </div>
         </div>
       ) : (
         /* Review Completed Summary Screen */
-        <div className="bg-white border border-[#E8E3D8] rounded-sm p-8 sm:p-10 space-y-8 text-center">
+        <div className="bg-white border border-[#E8E3D8] rounded-sm p-8 sm:p-10 space-y-8 text-center animate-in fade-in duration-300">
           <div className="w-12 h-12 bg-[#EEF7F2] text-[#1E5C3E] rounded-full mx-auto flex items-center justify-center border border-[#C2E2CE]">
             <Check className="w-6 h-6" />
           </div>
@@ -206,7 +270,7 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
             </h2>
           </div>
 
-          {/* Results Summary as required by spec */}
+          {/* Results Summary */}
           <div className="p-6 bg-[#FAF9F5] border border-[#E2DDD0] rounded-sm max-w-md mx-auto space-y-3">
             <div className="flex items-center justify-between text-sm">
               <span className="text-[#1E5C3E] font-medium flex items-center gap-2">
@@ -220,7 +284,7 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
               <div className="flex items-center justify-between text-sm border-t border-[#EAE5D8] pt-2">
                 <span className="text-[#734F18] font-medium flex items-center gap-2">
                   <AlertCircle className="w-4 h-4" />
-                  <strong>{unverifiedCount} claim could not be verified</strong>
+                  <strong>{unverifiedCount} {unverifiedCount === 1 ? 'claim' : 'claims'} flagged for review</strong>
                 </span>
                 <span className="font-mono text-xs text-[#73736C]">Flagged</span>
               </div>
@@ -228,7 +292,7 @@ export const VerifierReviewClient: React.FC<VerifierReviewClientProps> = ({
           </div>
 
           <p className="text-xs text-[#73736C] max-w-sm mx-auto">
-            These determinations will be archived with your verified credential signature in the Lagos Cultural Registry.
+            These determinations will be recorded in the community verification ledger for this cultural submission.
           </p>
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
