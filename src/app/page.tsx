@@ -10,8 +10,9 @@ import { VerificationBadge } from '@/components/VerificationBadge';
 import { ClaimDrawer } from '@/components/ClaimDrawer';
 import { SafeImage } from '@/components/SafeImage';
 import { ScrollytellingStory } from '@/components/ScrollytellingStory';
+import { CulturalBackground } from '@/components/CulturalBackground';
 import { Claim, CulturalAssetType } from '@/types';
-import { ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Sparkles, Heart } from 'lucide-react';
 import { gsap, ScrollTrigger, motion, prefersReducedMotion } from '@/lib/motion';
 
 export default function HomePage() {
@@ -50,109 +51,119 @@ export default function HomePage() {
     { type: 'story', label: 'Stories', desc: 'Waterfront oral histories, migration sagas, and memory', preview: '/images/cultural/makoko-waterfront-heritage.jpg' },
   ];
 
-  // GSAP Animations with matchMedia
+  // GSAP Animations with matchMedia — Unhurried, living cultural motion
   useEffect(() => {
     const isReduced = prefersReducedMotion();
     if (isReduced) return;
 
     const mm = gsap.matchMedia();
 
-    // Context for all clean teardown
     const ctx = gsap.context(() => {
       // =====================================================================
-      // 1. HERO ANIMATION SEQUENCE
+      // 1. UNHURRIED HERO ANIMATION SEQUENCE — Let the visitor live in the moment
       // =====================================================================
       mm.add('(min-width: 1024px)', () => {
-        // Desktop Full Sequence
-        const heroTl = gsap.timeline({ defaults: { ease: motion.editorial } });
+        const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-        // 1. small contextual label
+        // 1. Warm welcoming greeting label
         heroTl.fromTo(
           '[data-hero-label]',
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: motion.fast },
-          0.05
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.9 },
+          0.1
         );
 
-        // 2. headline reveals line-by-line using mask/clip treatment
+        // 2. Headline reveals line-by-line with majestic, unhurried ease
         heroTl.fromTo(
           '.hero-headline-line',
-          { yPercent: 110 },
-          { yPercent: 0, duration: 0.75, stagger: 0.12, ease: 'power4.out' },
-          0.12
+          { yPercent: 110, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 1.25, stagger: 0.22, ease: 'power3.out' },
+          0.25
         );
 
-        // 3. supporting copy rises subtly
+        // 3. Supporting copy gently unfolds
         heroTl.fromTo(
           '[data-hero-copy]',
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: motion.normal },
-          0.38
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 1.0 },
+          0.75
         );
 
-        // 4. CTAs appear
+        // 4. CTAs float into place
         heroTl.fromTo(
           '[data-hero-ctas]',
-          { opacity: 0, y: 14 },
-          { opacity: 1, y: 0, duration: motion.fast },
-          0.48
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.9 },
+          0.95
         );
 
-        // 5. hero image reveals using masked wipe & settles from scale(1.05) to scale(1)
+        // 5. Hero photograph reveals with cinematic wipe & unhurried scale settle
         if (heroImageContainerRef.current && heroImageRef.current) {
           heroTl.fromTo(
             heroImageContainerRef.current,
             { clipPath: 'inset(0% 100% 0% 0%)' },
-            { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.85, ease: 'power3.inOut' },
-            0.25
+            { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'power3.inOut' },
+            0.45
           );
           heroTl.fromTo(
             heroImageRef.current,
-            { scale: 1.06 },
-            { scale: 1, duration: 1.1, ease: 'power2.out' },
-            0.25
+            { scale: 1.08 },
+            { scale: 1, duration: 1.8, ease: 'power2.out' },
+            0.45
           );
+
+          // Subtle ScrollTrigger Parallax on Hero Image
+          gsap.to(heroImageContainerRef.current, {
+            yPercent: 8,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroImageContainerRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 1.2,
+            },
+          });
         }
       });
 
       mm.add('(max-width: 1023px)', () => {
-        // Mobile & Tablet: Short sequence with no excessive delay
-        const mobileTl = gsap.timeline({ defaults: { ease: motion.easeOut } });
+        // Mobile & Tablet: Warm, smooth sequence with breathing room
+        const mobileTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
         mobileTl.fromTo(
           '[data-hero-label]',
-          { opacity: 0, y: 8 },
-          { opacity: 1, y: 0, duration: motion.fast },
-          0.05
-        );
-
-        mobileTl.fromTo(
-          '.hero-headline-line',
-          { yPercent: 105 },
-          { yPercent: 0, duration: 0.55, stagger: 0.08, ease: 'power3.out' },
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.8 },
           0.1
         );
 
         mobileTl.fromTo(
+          '.hero-headline-line',
+          { yPercent: 105, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 0.9, stagger: 0.16, ease: 'power3.out' },
+          0.2
+        );
+
+        mobileTl.fromTo(
           '[data-hero-copy]',
-          { opacity: 0, y: 10 },
-          { opacity: 1, y: 0, duration: motion.fast },
-          0.25
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.85 },
+          0.5
         );
 
         mobileTl.fromTo(
           '[data-hero-ctas]',
-          { opacity: 0, y: 10 },
-          { opacity: 1, y: 0, duration: motion.fast },
-          0.32
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.8 },
+          0.7
         );
 
         if (heroImageContainerRef.current) {
           mobileTl.fromTo(
             heroImageContainerRef.current,
-            { opacity: 0, scale: 1.02 },
-            { opacity: 1, scale: 1, duration: motion.reveal },
-            0.2
+            { opacity: 0, scale: 1.03 },
+            { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' },
+            0.4
           );
         }
       });
@@ -231,23 +242,28 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div ref={pageContainerRef} className="space-y-16 sm:space-y-20 lg:space-y-28 pb-16 sm:pb-24">
+    <div ref={pageContainerRef} className="relative overflow-hidden space-y-16 sm:space-y-20 lg:space-y-28 pb-16 sm:pb-24">
       {/* ===================================================================
           HERO SECTION
           Sequence: label -> headline (line mask) -> copy -> CTAs -> hero image (wipe)
           Culture -> discovery -> emotion (Trust marketing moved lower!)
       =================================================================== */}
-      <section className="relative pt-4 sm:pt-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      <section className="relative pt-6 sm:pt-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+        {/* Ambient Warm Golden Sunlight & Adire Geometry */}
+        <CulturalBackground variant="hero" showPattern={true} />
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* Hero Content */}
           <div className="lg:col-span-7 space-y-5 sm:space-y-7">
-            {/* 1. Contextual Label */}
+            {/* 1. Welcoming Cultural Label */}
             <div
               data-hero-label
-              className="inline-flex items-center gap-2 px-2.5 py-1 bg-[#F2ECE1] border border-[#DDD8CA] rounded-sm text-[11px] font-mono tracking-wider text-[#69655D] uppercase"
+              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-[#FDF6E8] border border-[#E8D4B0] rounded-sm text-xs font-mono tracking-wider text-[#8F3314] shadow-2xs"
             >
-              <span>Isale Eko • Popo Aguda • Lekki • Badagry</span>
+              <span className="font-bold text-[#B4441F]">Ẹ̀kú àbọ̀ sí Èkó</span>
+              <span className="text-[#D0B78A]">•</span>
+              <span className="text-[#69655D]">Welcome to Living Lagos • Isale Eko • Popo Aguda</span>
             </div>
 
             {/* 2. Headline with Line-Level Mask Reveal */}
@@ -287,14 +303,14 @@ export default function HomePage() {
 
               <Link
                 href="/contribute"
-                className="min-h-[48px] inline-flex items-center justify-center gap-2 bg-transparent hover:bg-[#F2ECE1] text-[#161615] border border-[#D4CEBF] font-medium text-sm sm:text-base px-6 py-3.5 rounded-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#B4441F] active:scale-[0.98]"
+                className="min-h-[48px] inline-flex items-center justify-center gap-2 bg-[#FAF5EB] hover:bg-[#F2ECE1] text-[#161615] border border-[#D4CEBF] font-medium text-sm sm:text-base px-6 py-3.5 rounded-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#B4441F] active:scale-[0.98]"
               >
                 <span>Contribute what you know</span>
               </Link>
             </div>
           </div>
 
-          {/* 5 & 6. Hero Cultural Photography with Masked Wipe and Subtle Scale */}
+          {/* 5 & 6. Hero Cultural Photography — Unobstructed, pristine photo container */}
           <div className="lg:col-span-5 relative">
             <div
               ref={heroImageContainerRef}
@@ -311,18 +327,18 @@ export default function HomePage() {
                   fallbackCategory="Lagos Cultural Hero"
                 />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#161615]/85 via-[#161615]/20 to-transparent pointer-events-none" />
-              <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 text-white space-y-1 z-10 pointer-events-none">
-                <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[#E8E3D8]">
-                  {eyoAsset.image?.type === 'documentary' ? 'Documentary photograph' : 'Illustrative image'}
-                </span>
-                <p className="font-editorial text-base sm:text-xl font-medium leading-snug">
-                  Adamu Orisha Custodians • Isale Eko
-                </p>
-                <p className="text-[11px] sm:text-xs text-[#DDD8CA] truncate">
-                  Living Yoruba royal procession heritage
-                </p>
+            </div>
+
+            {/* Dedicated Editorial Caption Bar BELOW the Photo — Zero Overlap on Image! */}
+            <div className="mt-3 px-4 py-2.5 bg-[#FAF5EC] border border-[#E6DECE] rounded-sm flex items-center justify-between text-xs font-mono text-[#69655D] shadow-xs">
+              <div className="flex items-center gap-2 truncate">
+                <span className="font-semibold text-[#161615]">Adamu Orisha Custodians</span>
+                <span className="text-[#A89F8E]">•</span>
+                <span className="truncate">Isale Eko Lineage</span>
               </div>
+              <span className="shrink-0 text-[11px] px-2 py-0.5 bg-[#EDE4D2] text-[#8F3314] rounded-xs font-semibold">
+                Documentary Record
+              </span>
             </div>
           </div>
         </div>
@@ -414,12 +430,12 @@ export default function HomePage() {
           Subtle reveal, readable editorial storytelling
       =================================================================== */}
       <section ref={featuredStorySectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#FAF7F0] border border-[#E5E0D2] rounded-sm p-5 sm:p-8 lg:p-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
+        <div className="bg-[#FDFBF7] border border-[#E8E2D2] rounded-sm p-6 sm:p-10 lg:p-12 shadow-xs">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
-            {/* Story Image */}
+            {/* Story Image — 100% visible, no overlay text */}
             <div className="lg:col-span-6 relative">
-              <div className="relative aspect-[4/3] w-full rounded-sm overflow-hidden bg-[#E2DDD0]">
+              <div className="relative aspect-[4/3] w-full rounded-sm overflow-hidden bg-[#E2DDD0] border border-[#DDD6C7] shadow-md">
                 <SafeImage
                   src={eyoAsset.coverImage}
                   alt={eyoAsset.coverImageAlt}
@@ -429,42 +445,43 @@ export default function HomePage() {
                   fallbackCategory="Featured Editorial Story"
                 />
               </div>
-              <div className="mt-2.5 flex items-center justify-between text-xs text-[#73736C] font-mono">
-                <span>Isale Eko Heritage Circle</span>
-                <span>Oral Custodianship</span>
+              <div className="mt-2.5 flex items-center justify-between text-xs text-[#73736C] font-mono px-1">
+                <span className="font-semibold text-[#161615]">Isale Eko Heritage Circle</span>
+                <span>Oral Custodianship • Archival Photo</span>
               </div>
             </div>
 
             {/* Story Editorial Content */}
-            <div className="lg:col-span-6 space-y-4 sm:space-y-6">
-              <div className="space-y-1.5">
-                <span className="text-xs font-mono uppercase tracking-widest text-[#B4441F] font-semibold">
-                  Featured Long-form Story
-                </span>
-                <h3 className="font-editorial text-2xl sm:text-4xl lg:text-5xl font-medium text-[#161615] leading-[1.12]">
+            <div className="lg:col-span-6 space-y-5 sm:space-y-6">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-[#F5EDE1] text-[#8F3314] rounded-xs text-[11px] font-mono uppercase tracking-wider font-semibold">
+                  <span>Oral History Feature</span>
+                </div>
+                <h3 className="font-editorial text-3xl sm:text-4xl lg:text-5xl font-medium text-[#161615] leading-[1.12]">
                   Behind the white robes of Eyo
                 </h3>
               </div>
 
-              <blockquote data-story-quote className="border-l-2 border-[#B4441F] pl-3.5 sm:pl-4 italic text-[#4A4944] text-sm sm:text-base lg:text-lg font-editorial">
+              <blockquote data-story-quote className="border-l-2 border-[#B4441F] pl-4 italic text-[#3E3D39] text-base sm:text-lg font-editorial bg-[#FAF5EC] py-3 pr-3 rounded-r-xs">
                 “When the staff of Adamu Orisha strikes the earth of Isale Eko, it does not strike empty dust. It awakens three hundred years of Oba lineage.”
               </blockquote>
 
-              <p className="text-xs sm:text-sm lg:text-base text-[#4E4D47] leading-relaxed font-light">
+              <p className="text-sm sm:text-base text-[#4E4D47] leading-relaxed font-light">
                 The Adimu Orisha Play is not a street carnival for casual amusement. In Lagos Island memory, each procession represents an exacting spiritual architecture. When the Iga grant consent, the Island shuts its vehicular thoroughfares. Barefoot celebrants walk under strict vows: no caps, no head-ties, and no sandals may be worn within sight of an Eyo.
               </p>
 
               <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                 <Link
                   href={`/explore/${eyoAsset.slug}`}
-                  className="min-h-[44px] inline-flex items-center justify-center gap-2 bg-[#161615] hover:bg-[#B4441F] text-white text-xs sm:text-sm font-medium px-5 py-3 rounded-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#B4441F]"
+                  className="min-h-[46px] inline-flex items-center justify-center gap-2 bg-[#161615] hover:bg-[#B4441F] text-white text-sm font-medium px-6 py-3 rounded-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#B4441F]"
                 >
                   <span>Read full cultural record</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
                 <button
+                  type="button"
                   onClick={() => handleOpenClaim(trustSampleClaim)}
-                  className="min-h-[44px] text-xs sm:text-sm font-medium text-[#5A5954] hover:text-[#161615] underline underline-offset-4 text-center sm:text-left py-2"
+                  className="min-h-[46px] text-sm font-medium text-[#5A5954] hover:text-[#161615] underline underline-offset-4 text-center sm:text-left py-2"
                 >
                   Inspect verified claims
                 </button>
@@ -480,18 +497,20 @@ export default function HomePage() {
       =================================================================== */}
       <section
         ref={discoverSectionRef}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8"
+        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8 overflow-hidden py-4"
       >
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-[#E8E3D8] pb-3 sm:pb-4">
+        <CulturalBackground variant="warm" showPattern={true} />
+
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-[#E8E3D8] pb-3 sm:pb-4">
           <div>
-            <span className="text-xs font-mono uppercase tracking-widest text-[#73736C]">
+            <span className="text-xs font-mono uppercase tracking-widest text-[#B4441F] font-semibold">
               Living Archive
             </span>
             <h2 className="font-editorial text-2xl sm:text-4xl font-medium text-[#161615] mt-0.5">
               Discover Lagos
             </h2>
           </div>
-          <p className="text-xs text-[#73736C] max-w-sm">
+          <p className="text-xs sm:text-sm text-[#73736C] max-w-sm font-light">
             Curated across visual arts, nocturnal foodways, lagoon stilt architecture, and sacred traditions.
           </p>
         </div>

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { CulturalAsset } from '@/types';
@@ -14,10 +16,20 @@ export const EventCard: React.FC<EventCardProps> = ({ asset, priority = false })
   return (
     <Link
       href={`/explore/${asset.slug}`}
-      className="group flex flex-col bg-white border border-[#E8E3D8] hover:border-[#BFB9A8] transition-all duration-300 rounded-sm overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#B4441F] focus:ring-offset-2 active:scale-[0.98]"
+      className="group flex flex-col bg-[#FDFBF7] border border-[#EAE4D7] hover:border-[#B4441F]/40 shadow-xs hover:shadow-lg transition-all duration-300 rounded-sm overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#B4441F] focus:ring-offset-2 active:scale-[0.98]"
     >
-      {/* Visual Image container with SafeImage and appropriate aspect ratio */}
-      <div className="relative aspect-[4/3] sm:aspect-[4/3] w-full overflow-hidden bg-[#EBE6DC]">
+      {/* Category Bar ABOVE the Photo (Zero Overlap on Image!) */}
+      <div className="px-3.5 py-2 bg-[#FAF6EE] border-b border-[#EAE4D7] flex items-center justify-between text-xs font-mono">
+        <span className="uppercase tracking-wider font-semibold text-[#8F3314] text-[10px]">
+          {asset.type}
+        </span>
+        <span className="text-[10px] text-[#73736C]">
+          Seasonal Record
+        </span>
+      </div>
+
+      {/* Unobstructed Image Container — 100% visible, no overlay text */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#EBE6DC]">
         <SafeImage
           src={asset.coverImage}
           alt={asset.coverImageAlt}
@@ -26,17 +38,11 @@ export const EventCard: React.FC<EventCardProps> = ({ asset, priority = false })
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           objectPosition={asset.coverImagePosition || 'center'}
           fallbackCategory={asset.type}
-          imgClassName="transition-transform duration-500 ease-out group-hover:scale-[1.035]"
+          imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />
-        {/* Subtle category tag overlaid on top left */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
-          <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-1 bg-[#161615]/85 backdrop-blur-sm text-white rounded-sm">
-            {asset.type}
-          </span>
-        </div>
       </div>
 
-      {/* Card Content - Essential Info only, touch-accessible spacing */}
+      {/* Card Body */}
       <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 space-y-3 group-hover:-translate-y-0.5 transition-transform duration-300">
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2 flex-wrap">

@@ -2,10 +2,10 @@
 
 @layer base {
   :root {
-    --canvas: #FAF9F5;
-    --canvas-subtle: #F4F0E6;
-    --canvas-muted: #EBE6DA;
-    --canvas-card: #FFFFFF;
+    --canvas: #FAF7EE;
+    --canvas-subtle: #F3ECE0;
+    --canvas-muted: #E8DFCF;
+    --canvas-card: #FDFBF7;
     --ink: #161615;
     --ink-secondary: #484843;
     --ink-muted: #73736C;

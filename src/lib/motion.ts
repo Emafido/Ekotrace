@@ -8,23 +8,27 @@ if (typeof window !== 'undefined') {
 
 /**
  * Shared Motion Tokens
- * Strict adherence to the product's two motion profiles:
- * - Culture Mode: warm, celebratory, photographic, slightly cinematic
+ * Designed to let the visitor live in the moment:
+ * - Culture Mode: warm, celebratory, photographic, unhurried, deeply cinematic
  * - Trust Mode: calm, deliberate, precise, zero bounce
  */
 export const motion = {
-  quick: 0.18,
-  fast: 0.25,
-  normal: 0.35,
-  reveal: 0.7,
-  cinematic: 1.0,
+  quick: 0.3,
+  fast: 0.5,
+  normal: 0.85,
+  reveal: 1.25,
+  cinematic: 1.8,
+  stately: 2.4,
 
   easeOut: 'power3.out',
   soft: 'power2.out',
+  luxurious: 'power4.out',
+  smooth: 'power2.inOut',
+  ambient: 'sine.inOut',
   playful: 'back.out(1.1)', // Use very sparingly, only for micro-accents
 
   // Editorial & Trust profiles
-  editorial: 'power4.out',
+  editorial: 'power3.out',
   trustEase: 'power2.out', // Deliberate and calm for verification/claims
 } as const;
 

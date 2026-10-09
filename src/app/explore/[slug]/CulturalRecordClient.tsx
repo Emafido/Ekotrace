@@ -43,33 +43,33 @@ export const CulturalRecordClient: React.FC<CulturalRecordClientProps> = ({ asse
     if (isReduced) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial Hero Entrance Sequence: Category -> Title -> Location -> Verification -> Hero Image
-      const heroTl = gsap.timeline({ defaults: { ease: motion.editorial } });
+      // 1. Initial Hero Entrance Sequence: Unhurried, majestic cultural entrance
+      const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
       heroTl
         .fromTo(
           '[data-hero-meta]',
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: motion.fast },
-          0.05
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.8 },
+          0.1
         )
         .fromTo(
           '[data-hero-title]',
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: motion.normal },
-          0.12
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out' },
+          0.25
         )
         .fromTo(
           '[data-hero-location]',
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: motion.fast },
-          0.22
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.8 },
+          0.5
         )
         .fromTo(
           '[data-hero-image]',
-          { opacity: 0, scale: 1.03 },
-          { opacity: 1, scale: 1, duration: motion.reveal, ease: motion.easeOut },
-          0.3
+          { opacity: 0, scale: 1.04 },
+          { opacity: 1, scale: 1, duration: 1.5, ease: 'power2.out' },
+          0.6
         );
 
       // 2. Key Facts on Scroll with small stagger
@@ -80,9 +80,9 @@ export const CulturalRecordClient: React.FC<CulturalRecordClientProps> = ({ asse
           {
             opacity: 1,
             y: 0,
-            duration: motion.fast,
-            stagger: 0.08,
-            ease: motion.easeOut,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: 'power3.out',
             scrollTrigger: {
               trigger: factsRef.current,
               start: 'top 85%',
@@ -92,7 +92,7 @@ export const CulturalRecordClient: React.FC<CulturalRecordClientProps> = ({ asse
         );
       }
 
-      // 3. Claims Section Entrance (Trust Mode: calm, deliberate, small stagger, zero bounce)
+      // 3. Claims Section Entrance (Trust Mode: calm, deliberate, zero bounce)
       if (claimsSectionRef.current) {
         gsap.fromTo(
           claimsSectionRef.current.querySelectorAll('[data-claim-row]'),
@@ -100,7 +100,7 @@ export const CulturalRecordClient: React.FC<CulturalRecordClientProps> = ({ asse
           {
             opacity: 1,
             y: 0,
-            duration: motion.normal,
+            duration: 0.75,
             stagger: 0.08,
             ease: motion.trustEase,
             scrollTrigger: {
@@ -136,7 +136,7 @@ export const CulturalRecordClient: React.FC<CulturalRecordClientProps> = ({ asse
           1. Category & Verification state
           2. Title
           3. Location
-          4. Hero cultural photography
+          4. Hero cultural photography (Clean, unobstructed photo with caption strip below)
       =================================================================== */}
       <header ref={heroRef} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="space-y-3">
@@ -165,28 +165,35 @@ export const CulturalRecordClient: React.FC<CulturalRecordClientProps> = ({ asse
           </div>
         </div>
 
-        {/* 4. Cultural Hero Image with SafeImage, accurate objectPosition */}
-        <div
-          data-hero-image
-          className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] w-full rounded-sm overflow-hidden bg-[#E5E0D2] border border-[#DDD8CA] shadow-md"
-        >
-          <SafeImage
-            src={asset.coverImage}
-            alt={asset.coverImageAlt}
-            fill
-            priority
-            sizes="(max-width: 640px) 100vw, (max-width: 1200px) 95vw, 1200px"
-            objectPosition={asset.coverImagePosition || 'center 20%'}
-            fallbackCategory={asset.name}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5 flex items-end justify-between pointer-events-none gap-2 z-10">
-            <span className="text-[10px] sm:text-[11px] font-mono text-white/95 bg-black/65 backdrop-blur-sm px-2.5 py-1 rounded-sm">
-              {asset.image?.type === 'documentary' ? 'Documentary photograph' : 'Illustrative image'}
-              {asset.image?.credit ? ` • ${asset.image.credit}` : ''}
+        {/* 4. Cultural Hero Image — 100% visible, no overlay text obscuring it */}
+        <div data-hero-image className="space-y-2.5">
+          <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] w-full rounded-sm overflow-hidden bg-[#E5E0D2] border border-[#DDD8CA] shadow-md">
+            <SafeImage
+              src={asset.coverImage}
+              alt={asset.coverImageAlt}
+              fill
+              priority
+              sizes="(max-width: 640px) 100vw, (max-width: 1200px) 95vw, 1200px"
+              objectPosition={asset.coverImagePosition || 'center 20%'}
+              fallbackCategory={asset.name}
+            />
+          </div>
+
+          {/* Dedicated Photo Metadata Bar BELOW Image (Zero Overlap!) */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-3.5 py-2 bg-[#FAF5EB] border border-[#E8E2D4] rounded-sm text-xs font-mono text-[#69655D]">
+            <span className="flex items-center gap-2">
+              <span className="text-[#8F3314] font-semibold">
+                {asset.image?.type === 'documentary' ? 'Documentary photograph' : 'Illustrative image'}
+              </span>
+              {asset.image?.credit && (
+                <>
+                  <span className="text-[#A89F8E]">•</span>
+                  <span className="truncate">{asset.image.credit}</span>
+                </>
+              )}
             </span>
             {asset.contributor && (
-              <span className="hidden sm:inline-block text-[11px] font-mono text-white/95 bg-black/65 backdrop-blur-sm px-2.5 py-1 rounded-sm truncate max-w-xs">
+              <span className="text-[11px] text-[#8C887B] truncate">
                 Documented by {asset.contributor.name}
               </span>
             )}
